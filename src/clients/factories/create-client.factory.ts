@@ -1,4 +1,4 @@
-import { Client } from '../entities/client.entity';
+import { Client } from '../entities/client/client.entity';
 import { ResponseClientDto } from '../dto/response-client.dto';
 import { Injectable } from '@nestjs/common';
 import { ClientCreatedEvent } from '../events/client-created.event';
@@ -21,7 +21,9 @@ export class ClientFactory {
       data.groupLoanCycle,
       data.encodedKey,
     );
-    client.apply(new ClientCreatedEvent(client.id));
+    client.apply(
+      new ClientCreatedEvent(client.id, client.firstNam, client.lastNam),
+    );
     return client;
   }
 }

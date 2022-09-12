@@ -1,12 +1,12 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export class Client extends AggregateRoot {
-  
+    
   constructor(
     private readonly encodedKey: string,
     private readonly _id: string,
-    private readonly firstNam: string,
-    private readonly lastNam: string,
+    private readonly _firstNam: string,
+    private readonly _lastNam: string,
     private readonly gender: string,
     private readonly state: string,
     private readonly creationDate: string,
@@ -46,6 +46,12 @@ export class Client extends AggregateRoot {
 
   public get id(): string {
     return this._id;
+  }
+  public get lastNam(): string {
+    return this._lastNam;
+  }
+  public get firstNam(): string {
+    return this._firstNam;
   }
 }
 
