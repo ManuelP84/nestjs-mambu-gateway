@@ -1,46 +1,51 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export class Client extends AggregateRoot {
+  
   constructor(
-    private readonly firstNam: string,
-    private readonly _Custom_Fields_Clients: CustomFieldsClients,
-    private readonly _Example_Custom_Fields: ExampleCustomFields,
-    private readonly _Family_Clients: FamilyClients,
-    private readonly _Others_Clients: OthersClients,
-    private readonly _client_group_set: ClientGroupSet[],
-    private readonly activationDate: string,
-    private readonly addresses: Address[],
-    private readonly approvedDate: string,
-    private readonly assignedBranchKey: string,
-    private readonly assignedCentreKey: string,
-    private readonly assignedUserKey: string,
-    private readonly birthDate: string,
-    private readonly clientRoleKey: string,
-    private readonly closedDate: string,
-    private readonly creationDate: string,
-    private readonly emailAddress: string,
     private readonly encodedKey: string,
-    private readonly gender: string,
-    private readonly groupKeys: string[],
-    private readonly groupLoanCycle: number,
-    private readonly homePhone: string,
-    private readonly id: string,
-    private readonly idDocuments: IDDocument[],
-    private readonly lastModifiedDate: string,
+    private readonly _id: string,
+    private readonly firstNam: string,
     private readonly lastNam: string,
-    private readonly loanCycle: number,
-    private readonly middleName: string,
-    private readonly migrationEventKey: string,
-    private readonly mobilePhone: string,
-    private readonly mobilePhone2: string,
-    private readonly notes: string,
-    private readonly portalSettings: PortalSettings,
-    private readonly preferredLanguage: string,
-    private readonly profilePictureKey: string,
-    private readonly profileSignatureKey: string,
+    private readonly gender: string,
     private readonly state: string,
+    private readonly creationDate: string,
+    private readonly lastModifiedDate: string,
+    private readonly approvedDate: string,
+    private readonly preferredLanguage: string,
+    private readonly loanCycle: number,
+    private readonly groupLoanCycle: number,
+    private readonly clientRoleKey: string,
   ) {
     super();
+  }
+  private readonly assignedBranchKey: string;
+  private readonly assignedCentreKey: string;
+  private readonly assignedUserKey: string;
+  private readonly birthDate: string;  
+  private readonly closedDate: string;
+  private readonly homePhone: string;
+  private readonly emailAddress: string;
+  private readonly _custom_Fields_Clients: CustomFieldsClients;
+  private readonly _example_Custom_Fields: ExampleCustomFields;
+  private readonly _family_Clients: FamilyClients;
+  private readonly _others_Clients: OthersClients;
+  private readonly _client_group_set: ClientGroupSet[];
+  private readonly activationDate: string;
+  private readonly addresses: Address[];
+  private readonly groupKeys: string[];
+  private readonly idDocuments: IDDocument[];
+  private readonly middleName: string;
+  private readonly migrationEventKey: string;
+  private readonly mobilePhone: string;
+  private readonly mobilePhone2: string;
+  private readonly notes: string;
+  private readonly portalSettings: PortalSettings;
+  private readonly profilePictureKey: string;
+  private readonly profileSignatureKey: string;
+
+  public get id(): string {
+    return this._id;
   }
 }
 
