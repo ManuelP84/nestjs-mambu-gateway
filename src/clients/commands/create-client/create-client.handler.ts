@@ -2,9 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { CreateClientCommand } from './create-client.command';
 import { v4 as uuid } from 'uuid';
-import { ResponseClientDto } from '../dto';
-import { AxiosAdapter } from '../../common/providers/axios.adapter';
-import { ClientFactory } from '../factories/create-client.factory';
+import { ResponseClientDto } from '../../dto';
+import { AxiosAdapter } from '../../../common/providers/axios.adapter';
+import { ClientFactory } from '../../factories/create-client.factory';
 
 @CommandHandler(CreateClientCommand)
 export class CreateClientHandler implements ICommandHandler {

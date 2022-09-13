@@ -1,5 +1,5 @@
-import { NotFoundException } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
+import { NotFoundException } from '@nestjs/common';
 
 export abstract class EntityRepository<TSchema> {
   constructor(protected readonly entityModel: Model<TSchema>) {}
@@ -26,8 +26,8 @@ export abstract class EntityRepository<TSchema> {
     return this.entityModel.find(entityFilterQuery, {}, { lean: true });
   }
 
-  async create(schema: any): Promise<void> {
-    await this.entityModel.create(schema);
+  async create(schema: TSchema): Promise<TSchema> {
+    return await this.entityModel.create(schema);
   }
 
   async findOneAndReplace(

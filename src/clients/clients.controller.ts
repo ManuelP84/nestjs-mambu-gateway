@@ -11,8 +11,8 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { ResponseClientDto } from './dto/response-client.dto';
-import { CreateClientCommand } from './commands/create-client.command';
-import { GetClientsQuery } from './queries/get-clients.query';
+import { CreateClientCommand } from './commands/create-client/create-client.command';
+import { GetClientsQuery } from './queries/get-clients/get-clients.query';
 
 @Controller('clients')
 export class ClientsController {

@@ -1,7 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { Client } from '../entities/client/client.entity';
 import { ResponseClientDto } from '../dto/response-client.dto';
-import { Injectable } from '@nestjs/common';
-import { ClientCreatedEvent } from '../events/client-created.event';
+import { ClientCreatedEvent } from '../events/client-created/client-created.event';
 
 @Injectable()
 export class ClientFactory {

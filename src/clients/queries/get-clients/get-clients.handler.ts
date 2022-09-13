@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
-import { ResponseClientDto } from '../dto';
-import { AxiosAdapter } from '../../common/providers/axios.adapter';
+import { ResponseClientDto } from '../../dto';
+import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { GetClientsQuery } from './get-clients.query';
 
 @QueryHandler(GetClientsQuery)
