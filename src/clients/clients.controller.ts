@@ -14,6 +14,8 @@ import { ResponseClientDto } from './dto/response-client.dto';
 import { CreateClientCommand } from './commands/create-client/create-client.command';
 import { GetClientsQuery } from './queries/get-clients/get-clients.query';
 import { CreateClientLoanCommand } from './commands/create-client-loan/create-client-loan.command';
+import { CreateClientLoanDto } from './dto/create-client-loan.dto';
+import { Client } from './entities/client/client.entity';
 
 @Controller('clients')
 export class ClientsController {
@@ -23,27 +25,28 @@ export class ClientsController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Post()  
-  async createClient(@Body() createClientDto: CreateClientDto): Promise<void> {
+  @Post()
+  async createClient(
+    @Body() createClientDto: CreateClientDto,
+  ): Promise<Client> {
     /**
-   * Create a new client
-   */
-    await this.commandBus.execute<CreateClientCommand, void>(
+     * Create a new client
+     */
+    return await this.commandBus.execute<CreateClientCommand, Client>(
       new CreateClientCommand(createClientDto),
     );
     // return this.clientsService.create(createClientDto);
   }
 
-  @Post('loan/:id')  
+  @Post('loan')
   async createClientLoan(
-    @Body() createClientDto: CreateClientDto,
-    @Param('id') id: string,
-    ): Promise<void> {
+    @Body() createClientLoanDto: CreateClientLoanDto,
+  ): Promise<void> {
     /**
-   * Create a new client
-   */
-    await this.commandBus.execute<CreateClientCommand, void>(
-      new CreateClientLoanCommand(createClientDto, id),
+     * Create a new client and asign a loan account
+     */
+    await this.commandBus.execute<CreateClientLoanCommand, void>(
+      new CreateClientLoanCommand(createClientLoanDto),
     );
     // return this.clientsService.create(createClientDto);
   }
@@ -51,8 +54,8 @@ export class ClientsController {
   @Get()
   findAll(): Promise<ResponseClientDto[]> {
     /**
-   * Retrive all clients
-   */
+     * Retrive all clients
+     */
     return this.queryBus.execute<GetClientsQuery, ResponseClientDto[]>(
       new GetClientsQuery(),
     );

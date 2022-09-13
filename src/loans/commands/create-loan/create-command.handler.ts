@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateLoanCommand } from './create-loan.command';
 import { ConfigService } from '@nestjs/config';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
-import { ResponseLoanDto } from '../../dtos/response.loan.dto';
+import { ResponseLoanDto } from '../../dtos';
 
 @CommandHandler(CreateLoanCommand)
 export class CreateLoanHandler implements ICommandHandler {

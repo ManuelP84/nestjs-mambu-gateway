@@ -5,7 +5,7 @@ import { ClientsService } from './clients.service';
 import { ClientsController } from './clients.controller';
 import { CommonModule } from '../common/common.module';
 import { ClientCommandHandlers } from './commands';
-import { ClientEventHandlers } from './events/client-created';
+import { ClientEventHandlers } from './events';
 import { ClientFactory } from './factories/create-client.factory';
 import { ClientQueriesHandlers } from './queries/get-clients';
 import { DatabaseModule } from '../database/database.module';

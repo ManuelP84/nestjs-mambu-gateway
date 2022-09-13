@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { ResponseClientDto } from '../../dto';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ClientFactory } from '../../factories/create-client.factory';
+import { Client } from '../../entities/client/client.entity';
 
 @CommandHandler(CreateClientCommand)
 export class CreateClientHandler implements ICommandHandler {
@@ -15,7 +16,7 @@ export class CreateClientHandler implements ICommandHandler {
     private readonly clientFactory: ClientFactory,
   ) {}
 
-  async execute(command: CreateClientCommand): Promise<void> {
+  async execute(command: CreateClientCommand): Promise<Client> {
     const { createClientDto } = command;
     const headers = {
       apikey: this.configService.get('apyKey'),
@@ -38,5 +39,7 @@ export class CreateClientHandler implements ICommandHandler {
     );
 
     client.commit();
+
+    return client;
   }
 }

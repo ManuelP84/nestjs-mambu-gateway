@@ -1,8 +1,7 @@
-import { CreateClientDto } from '../../dto/create-client.dto';
+import { CreateClientLoanDto } from '../../dto/create-client-loan.dto';
 
 export class CreateClientLoanCommand {
     constructor(
-        public readonly createClientDto: CreateClientDto,
-        public readonly loanId: string,
+        public readonly createClientLoanDto: CreateClientLoanDto,
     ){}
 }

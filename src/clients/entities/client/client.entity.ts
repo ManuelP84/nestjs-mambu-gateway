@@ -1,9 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export class Client extends AggregateRoot {
-    
   constructor(
-    private readonly encodedKey: string,
+    private readonly _encodedKey: string,
     private readonly _id: string,
     private readonly _firstNam: string,
     private readonly _lastNam: string,
@@ -22,7 +21,7 @@ export class Client extends AggregateRoot {
   private readonly assignedBranchKey: string;
   private readonly assignedCentreKey: string;
   private readonly assignedUserKey: string;
-  private readonly birthDate: string;  
+  private readonly birthDate: string;
   private readonly closedDate: string;
   private readonly homePhone: string;
   private readonly emailAddress: string;
@@ -43,6 +42,10 @@ export class Client extends AggregateRoot {
   private readonly portalSettings: PortalSettings;
   private readonly profilePictureKey: string;
   private readonly profileSignatureKey: string;
+
+  public get encodedKey(): string {
+    return this._encodedKey;
+  }
 
   public get id(): string {
     return this._id;
