@@ -17,7 +17,7 @@ export class GetClientsHandler implements IQueryHandler<GetClientsQuery> {
       'Content-Type': 'application/json',
     };
     const data = await this.axios.get<ResponseClientDto[]>(
-      this.configService.get('url'),
+      this.configService.get('urlClients'),
       {
         headers,
         baseURL: this.configService.get('baseUrl'),

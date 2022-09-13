@@ -13,6 +13,7 @@ import { CreateClientDto } from './dto/create-client.dto';
 import { ResponseClientDto } from './dto/response-client.dto';
 import { CreateClientCommand } from './commands/create-client/create-client.command';
 import { GetClientsQuery } from './queries/get-clients/get-clients.query';
+import { CreateClientLoanCommand } from './commands/create-client-loan/create-client-loan.command';
 
 @Controller('clients')
 export class ClientsController {
@@ -22,16 +23,36 @@ export class ClientsController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @Post()
-  async create(@Body() createClientDto: CreateClientDto): Promise<void> {
+  @Post()  
+  async createClient(@Body() createClientDto: CreateClientDto): Promise<void> {
+    /**
+   * Create a new client
+   */
     await this.commandBus.execute<CreateClientCommand, void>(
       new CreateClientCommand(createClientDto),
     );
     // return this.clientsService.create(createClientDto);
   }
 
+  @Post('loan/:id')  
+  async createClientLoan(
+    @Body() createClientDto: CreateClientDto,
+    @Param('id') id: string,
+    ): Promise<void> {
+    /**
+   * Create a new client
+   */
+    await this.commandBus.execute<CreateClientCommand, void>(
+      new CreateClientLoanCommand(createClientDto, id),
+    );
+    // return this.clientsService.create(createClientDto);
+  }
+
   @Get()
   findAll(): Promise<ResponseClientDto[]> {
+    /**
+   * Retrive all clients
+   */
     return this.queryBus.execute<GetClientsQuery, ResponseClientDto[]>(
       new GetClientsQuery(),
     );

@@ -1,5 +1,5 @@
-import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { ConfigService } from '@nestjs/config';
 import { CreateClientCommand } from './create-client.command';
 import { v4 as uuid } from 'uuid';
 import { ResponseClientDto } from '../../dto';
@@ -25,7 +25,7 @@ export class CreateClientHandler implements ICommandHandler {
     };
 
     const data = await this.axios.post<ResponseClientDto>(
-      this.configService.get('url'),
+      this.configService.get('urlClients'),
       createClientDto,
       {
         headers,

@@ -1,5 +1,5 @@
 import { Connection } from "mongoose";
-import { ClientCreatedSchema } from '../../entities/event/client-created.event';
+import { ClientCreatedSchema } from '../../entities/event/client-created.entity';
 
 export const usersProviders = [
     {

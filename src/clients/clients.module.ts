@@ -4,7 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { ClientsService } from './clients.service';
 import { ClientsController } from './clients.controller';
 import { CommonModule } from '../common/common.module';
-import { ClientCommandHandlers } from './commands/create-client';
+import { ClientCommandHandlers } from './commands';
 import { ClientEventHandlers } from './events/client-created';
 import { ClientFactory } from './factories/create-client.factory';
 import { ClientQueriesHandlers } from './queries/get-clients';
