@@ -9,12 +9,12 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ClientsService } from './clients.service';
-import { CreateClientDto } from './dto/create-client.dto';
+import { CreateClientDto } from './dto/create-client/create-client.dto';
 import { ResponseClientDto } from './dto/response-client.dto';
 import { CreateClientCommand } from './commands/create-client/create-client.command';
 import { GetClientsQuery } from './queries/get-clients/get-clients.query';
 import { CreateClientLoanCommand } from './commands/create-client-loan/create-client-loan.command';
-import { CreateClientLoanDto } from './dto/create-client-loan.dto';
+import { CreateClientLoanDto } from './dto/create-client-loan/create-client-loan.dto';
 import { Client } from './entities/client/client.entity';
 
 @Controller('clients')

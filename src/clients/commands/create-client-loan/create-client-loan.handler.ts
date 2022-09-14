@@ -23,17 +23,17 @@ export class CreateClientLoanHandler implements ICommandHandler {
     const logger = new Logger(CreateClientLoanHandler.name);
 
     const { createClientLoanDto } = command;
-    const { clientInfo } = createClientLoanDto;
-    const { loanInfo } = createClientLoanDto;
+    const { clientInfo: createClientDto } = createClientLoanDto;
+    const { loanInfo: createLoanDto } = createClientLoanDto;
 
     const newClient = await this.commandBus.execute<
       CreateClientCommand,
       Client
-    >(new CreateClientCommand(clientInfo));
+    >(new CreateClientCommand(createClientDto));
 
     const newLoan = await this.commandBus.execute<CreateLoanCommand, Loan>(
       new CreateLoanCommand({
-        ...loanInfo,
+        ...createLoanDto,
         accountHolderKey: newClient.encodedKey,
       }),
     );

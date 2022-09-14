@@ -1,4 +1,4 @@
-import { CreateClientLoanDto } from '../../dto/create-client-loan.dto';
+import { CreateClientLoanDto } from '../../dto/create-client-loan/create-client-loan.dto';
 
 export class CreateClientLoanCommand {
     constructor(
