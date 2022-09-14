@@ -7,7 +7,7 @@ import { CommonModule } from '../common/common.module';
 import { ClientCommandHandlers } from './commands';
 import { ClientEventHandlers } from './events';
 import { ClientFactory } from './factories/create-client.factory';
-import { ClientQueriesHandlers } from './queries/get-clients';
+import { ClientQueriesHandlers } from './queries';
 import { DatabaseModule } from '../database/database.module';
 import { ClientCreatedRepository } from './database/client.repository';
 import { usersProviders } from './database/providers/clients-database.providers';

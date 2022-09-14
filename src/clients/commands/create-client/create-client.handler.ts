@@ -6,6 +6,8 @@ import { ResponseClientDto } from '../../dto';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ClientFactory } from '../../factories/create-client.factory';
 import { Client } from '../../entities/client/client.entity';
+import { Logger } from '@nestjs/common';
+import { getHeaders } from '../../../common/helpers';
 
 @CommandHandler(CreateClientCommand)
 export class CreateClientHandler implements ICommandHandler {
@@ -17,14 +19,10 @@ export class CreateClientHandler implements ICommandHandler {
   ) {}
 
   async execute(command: CreateClientCommand): Promise<Client> {
+    const logger = new Logger(CreateClientHandler.name);
+    logger.log('Creating a new client...');
     const { createClientDto } = command;
-    const headers = {
-      apikey: this.configService.get('apyKey'),
-      Accept: 'application/vnd.mambu.v2+json',
-      'Content-Type': 'application/json',
-      'Idempotency-Key': uuid(),
-    };
-
+    const headers = getHeaders(this.configService);
     const data = await this.axios.post<ResponseClientDto>(
       this.configService.get('urlClients'),
       createClientDto,

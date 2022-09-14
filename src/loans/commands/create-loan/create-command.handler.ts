@@ -5,6 +5,7 @@ import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ResponseLoanDto } from '../../dtos';
 import { LoanFactory } from '../../factories/create-loan.factory';
 import { Loan } from '../../entities/loan/loan.entity';
+import { getHeaders } from '../../../common/helpers';
 
 @CommandHandler(CreateLoanCommand)
 export class CreateLoanHandler implements ICommandHandler {
@@ -17,12 +18,7 @@ export class CreateLoanHandler implements ICommandHandler {
 
   async execute(command: CreateLoanCommand): Promise<Loan> {
     const { createLoanDto } = command;
-    const headers = {
-      apikey: this.configService.get('apyKey'),
-      Accept: 'application/vnd.mambu.v2+json',
-      'Content-Type': 'application/json',
-    };
-
+    const headers = getHeaders(this.configService);
     const data = await this.axios.post<ResponseLoanDto>(
       this.configService.get('urlLoans'),
       createLoanDto,

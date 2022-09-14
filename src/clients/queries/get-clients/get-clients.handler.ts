@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ResponseClientDto } from '../../dto';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { GetClientsQuery } from './get-clients.query';
+import { getHeaders } from '../../../common/helpers';
 
 @QueryHandler(GetClientsQuery)
 export class GetClientsHandler implements IQueryHandler<GetClientsQuery> {
@@ -12,10 +13,7 @@ export class GetClientsHandler implements IQueryHandler<GetClientsQuery> {
   ) {}
 
   async execute(): Promise<ResponseClientDto[]> {
-    const headers = {
-      apikey: this.configService.get('apyKey'),
-      'Content-Type': 'application/json',
-    };
+    const headers = getHeaders(this.configService);
     const data = await this.axios.get<ResponseClientDto[]>(
       this.configService.get('urlClients'),
       {
