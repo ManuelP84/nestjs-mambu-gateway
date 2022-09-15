@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client/create-client.dto';
 import { ResponseClientDto } from './dto/response-client.dto';
 import { CreateClientCommand } from './commands/create-client/create-client.command';
@@ -20,7 +19,6 @@ import { Client } from './entities/client/client.entity';
 @Controller('clients')
 export class ClientsController {
   constructor(
-    //private readonly clientsService: ClientsService,
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
   ) {}
@@ -35,7 +33,6 @@ export class ClientsController {
     return await this.commandBus.execute<CreateClientCommand, Client>(
       new CreateClientCommand(createClientDto),
     );
-    // return this.clientsService.create(createClientDto);
   }
 
   @Post('loan')
@@ -48,7 +45,6 @@ export class ClientsController {
     await this.commandBus.execute<CreateClientLoanCommand, void>(
       new CreateClientLoanCommand(createClientLoanDto),
     );
-    // return this.clientsService.create(createClientDto);
   }
 
   @Get()
@@ -59,7 +55,6 @@ export class ClientsController {
     return this.queryBus.execute<GetClientsQuery, ResponseClientDto[]>(
       new GetClientsQuery(),
     );
-    // return this.clientsService.findAll();
   }
 
   // @Get(':id')

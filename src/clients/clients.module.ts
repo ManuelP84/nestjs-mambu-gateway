@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { ClientsService } from './clients.service';
 import { ClientsController } from './clients.controller';
 import { CommonModule } from '../common/common.module';
 import { ClientCommandHandlers } from './commands';
@@ -16,7 +15,6 @@ import { usersProviders } from './database/providers/clients-database.providers'
   imports: [CommonModule, CqrsModule, DatabaseModule],
   controllers: [ClientsController],
   providers: [
-    ClientsService,
     ClientFactory,
     ClientCreatedRepository,
     ...ClientCommandHandlers,
