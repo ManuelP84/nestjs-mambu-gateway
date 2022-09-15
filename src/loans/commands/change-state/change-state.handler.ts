@@ -1,10 +1,11 @@
 import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ChangeStateCommand } from './change-state.command';
 import { getHeaders } from '../../../common/helpers';
 import { ResponseChangeStateDto } from '../../dtos';
-import { Logger } from '@nestjs/common';
 
 @CommandHandler(ChangeStateCommand)
 export class ChangeStateHandler implements ICommandHandler {

@@ -1,6 +1,7 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { LoanCreatedEvent } from './loan-created.event';
 import { Logger } from '@nestjs/common';
+
+import { LoanCreatedEvent } from './loan-created.event';
 
 @EventsHandler(LoanCreatedEvent)
 export class LoanCreatedHandler implements IEventHandler {

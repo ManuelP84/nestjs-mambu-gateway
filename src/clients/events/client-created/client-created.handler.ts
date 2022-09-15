@@ -1,8 +1,9 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+
 import { ClientCreatedEvent } from './client-created.event';
 import { ClientCreatedRepository } from '../../database/client.repository';
 import { ClientCreated } from '../../entities/event/client-created.entity';
-import { Logger } from '@nestjs/common';
 
 @EventsHandler(ClientCreatedEvent)
 export class ClientCreatedHandler implements IEventHandler<ClientCreatedEvent> {

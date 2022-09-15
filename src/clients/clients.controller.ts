@@ -3,11 +3,9 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
 import { CreateClientDto } from './dto/create-client/create-client.dto';
 import { ResponseClientDto } from './dto/response-client.dto';
 import { CreateClientCommand } from './commands/create-client/create-client.command';
@@ -56,19 +54,4 @@ export class ClientsController {
       new GetClientsQuery(),
     );
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.clientsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateClientDto: UpdateClientDto) {
-  //   return this.clientsService.update(+id, updateClientDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.clientsService.remove(+id);
-  // }
 }

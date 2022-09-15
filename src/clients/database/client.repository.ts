@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { Inject, Injectable } from '@nestjs/common';
+
 import { EntityRepository } from '../../database/utils/entity.repository';
 import { ClientCreated } from '../entities/event/client-created.entity';
 

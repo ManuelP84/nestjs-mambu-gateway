@@ -4,13 +4,14 @@ import {
   EventBus,
   ICommandHandler,
 } from '@nestjs/cqrs';
+import { Logger } from '@nestjs/common';
+
 import { CreateClientLoanCommand } from './create-client-loan.command';
 import { CreateClientCommand } from '../create-client/create-client.command';
 import { Client } from '../../entities/client/client.entity';
 import { CreateLoanCommand } from '../../../loans/commands/create-loan/create-loan.command';
 import { Loan } from '../../../loans/entities/loan/loan.entity';
 import { ClientLoanCreatedEvent } from '../../events/client-loan-created/client-loan-created.event';
-import { Logger } from '@nestjs/common';
 
 @CommandHandler(CreateClientLoanCommand)
 export class CreateClientLoanHandler implements ICommandHandler {

@@ -1,6 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
-import { CreateLoanCommand } from './create-loan.command';
 import { ConfigService } from '@nestjs/config';
+
+import { CreateLoanCommand } from './create-loan.command';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ResponseLoanDto } from '../../dtos';
 import { LoanFactory } from '../../factories/create-loan.factory';
