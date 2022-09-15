@@ -1,7 +1,7 @@
 import { Connection } from "mongoose";
 import { ClientCreatedSchema } from '../../entities/event/client-created.entity';
 
-export const usersProviders = [
+export const clientProviders = [
     {
       provide: 'CLIENT_CREATED_MODEL',
       useFactory: (connection: Connection) =>

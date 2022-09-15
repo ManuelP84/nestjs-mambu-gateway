@@ -9,7 +9,7 @@ import { ClientFactory } from './factories/create-client.factory';
 import { ClientQueriesHandlers } from './queries';
 import { DatabaseModule } from '../database/database.module';
 import { ClientCreatedRepository } from './database/client.repository';
-import { usersProviders } from './database/providers/clients-database.providers';
+import { clientProviders } from './database/providers/clients-database.providers';
 
 @Module({
   imports: [CommonModule, CqrsModule, DatabaseModule],
@@ -20,7 +20,7 @@ import { usersProviders } from './database/providers/clients-database.providers'
     ...ClientCommandHandlers,
     ...ClientEventHandlers,
     ...ClientQueriesHandlers,
-    ...usersProviders
+    ...clientProviders
   ],
 })
 export class ClientsModule {}
