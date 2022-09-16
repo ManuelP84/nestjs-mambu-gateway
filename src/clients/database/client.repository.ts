@@ -7,7 +7,7 @@ import { ClientCreated } from '../entities/event/client-created.entity';
 @Injectable()
 export class ClientCreatedRepository extends EntityRepository<ClientCreated> {
     constructor(
-        @Inject('CLIENT_CREATED_MODEL')
+        @Inject('CLIENT_MONGO_MODEL')
         private readonly clientCreatedModel: Model<ClientCreated>
     ){
         super(clientCreatedModel);
