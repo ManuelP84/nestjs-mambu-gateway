@@ -6,12 +6,13 @@ import { ConfigService } from '@nestjs/config';
 export const databaseProviders = [
   {
     provide: 'MONGODB_CONNECTION',
-    useFactory: (): Promise<typeof mongoose> =>
-      mongoose.connect(process.env.MONGO_ATLAS_CONNECTON),
+    useFactory: (config: ConfigService): Promise<typeof mongoose> =>
+      mongoose.connect(config.get('mongoConnection')),
+    inject: [ConfigService],
   },
   {
     provide: 'POSTGRES_CONNECTION',
-    useFactory: async (config: ConfigService) => {
+    useFactory: (config: ConfigService): DataSource => {
       const dataSource = new DataSource({
         type: 'postgres',
         host: 'localhost',
@@ -21,7 +22,7 @@ export const databaseProviders = [
         database: config.get('postgresDb'),
         synchronize: true,
       });
-      return dataSource.initialize();
+      return dataSource;
     },
     inject: [ConfigService],
   },

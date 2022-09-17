@@ -1,20 +1,22 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { Entity } from 'typeorm';
 
+@Entity()
 export class Client extends AggregateRoot {
   constructor(
     private readonly _encodedKey: string,
     private readonly _id: string,
     private readonly _firstNam: string,
     private readonly _lastNam: string,
-    private readonly gender: string,
-    private readonly state: string,
-    private readonly creationDate: string,
-    private readonly lastModifiedDate: string,
-    private readonly approvedDate: string,
-    private readonly preferredLanguage: string,
-    private readonly loanCycle: number,
-    private readonly groupLoanCycle: number,
-    private readonly clientRoleKey: string,
+    private readonly _gender: string,
+    private readonly _state: string,
+    private readonly _creationDate: string,
+    private readonly _lastModifiedDate: string,
+    private readonly _approvedDate: string,
+    private readonly _preferredLanguage: string,
+    private readonly _loanCycle: number,
+    private readonly _groupLoanCycle: number,
+    private readonly _clientRoleKey: string,
   ) {
     super();
   }
@@ -55,6 +57,42 @@ export class Client extends AggregateRoot {
   }
   public get firstNam(): string {
     return this._firstNam;
+  }
+
+  public get gender(): string {
+    return this._gender;
+  }
+
+  public get state(): string {
+    return this._state;
+  }
+
+  public get clientRoleKey(): string {
+    return this._clientRoleKey;
+  }
+
+  public get groupLoanCycle(): number {
+    return this._groupLoanCycle;
+  }
+
+  public get loanCycle(): number {
+    return this._loanCycle;
+  }
+
+  public get preferredLanguage(): string {
+    return this._preferredLanguage;
+  }
+
+  public get approvedDate(): string {
+    return this._approvedDate;
+  }
+
+  public get lastModifiedDate(): string {
+    return this._lastModifiedDate;
+  }
+
+  public get creationDate(): string {
+    return this._creationDate;
   }
 }
 
