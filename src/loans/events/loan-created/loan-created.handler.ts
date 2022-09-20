@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { Logger } from '@nestjs/common';
+import { Logger, HttpException } from '@nestjs/common';
 
 import { LoanCreatedEvent } from './loan-created.event';
 import { LoanCreateRepository } from '../../database/loan.repository';
@@ -14,7 +14,7 @@ export class LoanCreatedHandler implements IEventHandler {
     const logger = new Logger(LoanCreatedHandler.name);
     logger.log(
       `${event.productName} :: Total amount: ${event.loanAmount} :: Client: ${event.clientKey}`,
-    );
+    );      
 
     const loanCreated = await this.loanCreatedRepository.create({
       encodekey: event.productKey,
