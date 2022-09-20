@@ -1,12 +1,26 @@
 version: '3'
 
 services:
-  db:
+  posgresdb:
     image: postgres:14.3
     restart: always
     ports:
-      - '5432:5432'
+      - 5432:5432
     environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     container_name: mambu
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:5
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: mongo_mambu
+    volumes:
+      - ./mongo:/data/db
+

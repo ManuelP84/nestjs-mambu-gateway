@@ -1,4 +1,4 @@
-import { ChangeStateDto } from 'src/loans/dtos/change-state/change-state.dto';
+import { ChangeStateDto } from '../../dtos/change-state/change-state.dto';
 
 export class ChangeStateCommand {
   constructor(

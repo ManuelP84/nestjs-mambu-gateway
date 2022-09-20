@@ -15,4 +15,6 @@ export class ClientCreated{
   clientLastName: string;
 }
 
+export type ClientDocument = ClientCreated & Document;
+
 export const ClientCreatedSchema = SchemaFactory.createForClass(ClientCreated);

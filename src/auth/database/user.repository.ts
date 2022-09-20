@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TypeOrmAdapter } from '../../database/utils/typeorm-adapter.repository';
-import { LoanCreated } from '../entities/loan-created/loan-created.entity';
+import { User } from '../entities';
 
 @Injectable()
-export class LoanCreateRepository extends TypeOrmAdapter<LoanCreated> {
+export class UserRepository extends TypeOrmAdapter<User> {
   constructor(
-    @InjectRepository(LoanCreated)
-    private readonly repository: Repository<LoanCreated>,
+    @InjectRepository(User)
+    private readonly repository: Repository<User>,
   ) {
     super(repository);
   }

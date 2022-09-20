@@ -1,6 +1,6 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { BadRequestException, HttpException, Logger } from '@nestjs/common';
 
 import { CreateClientCommand } from './create-client.command';
 import { ResponseClientDto } from '../../dto';

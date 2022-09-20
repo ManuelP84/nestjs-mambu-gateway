@@ -5,9 +5,8 @@ import {
   FindOneOptions,
   Repository,
 } from 'typeorm';
-import { BaseEntityRepository } from '../interfaces/entity-repository.interface';
 
-export abstract class TypeOrmAdapter<TModel> implements BaseEntityRepository<TModel> {
+export abstract class TypeOrmAdapter<TModel> {
   constructor(protected readonly entityModel: Repository<TModel>) {}
 
   async findOne(options: FindOneOptions<TModel>): Promise<TModel> {

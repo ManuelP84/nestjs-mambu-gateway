@@ -1,13 +1,11 @@
 import { FilterQuery, Model } from 'mongoose';
 import { NotFoundException } from '@nestjs/common';
-import { BaseEntityRepository } from '../interfaces/entity-repository.interface';
 
-export abstract class MongooseAdapter<TSchema>
-  implements BaseEntityRepository<TSchema>
+export abstract class MongooseAdapter<TSchema, TDocument>
 {
-  constructor(protected readonly entityModel: Model<TSchema>) {}
+  constructor(protected readonly entityModel: Model<TDocument>) {}
 
-  async findOne(entityFilterQuery?: FilterQuery<TSchema>): Promise<TSchema> {
+  async findOne(entityFilterQuery?: FilterQuery<TDocument>): Promise<TDocument> {
     const entityDocument = await this.entityModel.findOne(
       entityFilterQuery,
       {},
@@ -21,12 +19,12 @@ export abstract class MongooseAdapter<TSchema>
     return entityDocument;
   }
 
-  async find(entityFilterQuery?: FilterQuery<TSchema>): Promise<TSchema[]> {
+  async find(entityFilterQuery?: FilterQuery<TSchema>): Promise<TDocument[]> {
     return this.entityModel.find(entityFilterQuery, {}, { lean: true });
   }
 
-  async create(schema: TSchema): Promise<TSchema> {
-    return await this.entityModel.create(schema);
+  async create(document: TDocument): Promise<TDocument> {
+    return await this.entityModel.create(document);
   }
 
   async findOneAndReplace(

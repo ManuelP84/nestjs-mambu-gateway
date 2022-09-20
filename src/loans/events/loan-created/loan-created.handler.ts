@@ -21,9 +21,6 @@ export class LoanCreatedHandler implements IEventHandler {
       loanName: event.productName,
       accountHolderKey: event.clientKey,
       loanAmount: event.loanAmount,
-    });
-
-    console.log(loanCreated);
-    
+    });        
   }
 }
