@@ -1,9 +1,10 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
 export class Loan extends AggregateRoot {
+  
   constructor(
     private readonly _encodedKey: string,
-    private readonly id: string,
+    private readonly _id: string,
     private readonly accountHolderType: string,
     private readonly _accountHolderKey: string,
     private readonly creationDate: string,
@@ -81,7 +82,10 @@ export class Loan extends AggregateRoot {
   }
   public get encodedKey(): string {
     return this._encodedKey;
-  }
+  } 
+  public get id(): string {
+    return this._id;
+  } 
 }
 
 interface ExampleCustomFields {

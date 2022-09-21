@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 
 import { ClientCreatedEvent } from './client-created.event';
 import { ClientCreatedRepository } from '../../database/client.repository';
-import { ClientCreated, ClientDocument } from '../../entities/event/client-created.entity';
+import { ClientDocument } from '../../entities/event/client-created.entity';
 
 @EventsHandler(ClientCreatedEvent)
 export class ClientCreatedHandler implements IEventHandler<ClientCreatedEvent> {

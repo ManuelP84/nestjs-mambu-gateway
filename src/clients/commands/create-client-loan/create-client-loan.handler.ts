@@ -38,11 +38,12 @@ export class CreateClientLoanHandler implements ICommandHandler {
         accountHolderKey: newClient.encodedKey,
       }),
     );
+    
     logger.log('Assigning a loan to the new client...');
 
     if (newClient && newLoan) {
       this.eventBus.publish(
-        new ClientLoanCreatedEvent(newLoan.accountHolderKey, newLoan.loanName),
+        new ClientLoanCreatedEvent(newLoan.accountHolderKey, newLoan.loanName, newLoan.id),
       );
     }
   }
