@@ -12,7 +12,11 @@ import { ClientCreatedRepository } from './database/client.repository';
 import { clientProviders } from './database/providers/clients-database.providers';
 
 @Module({
-  imports: [CommonModule, CqrsModule, DatabaseModule],
+  imports: [
+    CommonModule, 
+    CqrsModule, 
+    DatabaseModule, 
+  ],
   controllers: [ClientsController],
   providers: [
     ClientFactory,
@@ -20,7 +24,7 @@ import { clientProviders } from './database/providers/clients-database.providers
     ...ClientCommandHandlers,
     ...ClientEventHandlers,
     ...ClientQueriesHandlers,
-    ...clientProviders
+    ...clientProviders,
   ],
 })
 export class ClientsModule {}

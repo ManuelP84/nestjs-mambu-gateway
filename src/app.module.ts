@@ -7,13 +7,15 @@ import { EnvConfig } from './config/env.config';
 import { DatabaseModule } from './database/database.module';
 import { LoansModule } from './loans/loans.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [EnvConfig],
       isGlobal: true
-    }),    
+    }),
+    JwtModule.register({}),    
     //DatabaseModule,
     ClientsModule, 
     CommonModule, 

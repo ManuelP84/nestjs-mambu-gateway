@@ -3,16 +3,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Role } from '.';
 
 @Entity()
 export class User {
-  
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,7 +19,13 @@ export class User {
   @Column('text', {
     select: false,
   })
-  password: string;
+  hash: string;
+
+  @Column('text', {
+    select: false,
+    default: null,
+  })
+  hashRt: string;
 
   @Column('text')
   name: string;
@@ -37,23 +38,19 @@ export class User {
   })
   isActive: boolean;
 
-  // @ManyToMany(() => Role)
-  // @JoinTable()
-  // roles: Role[];
+  @Column('text', {
+    array: true,
+    default: ['user'],
+  })
+  roles: string[];
 
-  //   @Column('text', {
-  //     array: true,
-  //     default: ['user'],
-  //   })
-  //   roles: string[];
+  @BeforeInsert()
+  checkFieldsBeforeInsert() {
+    this.email = this.email.toLocaleLowerCase().trim();
+  }
 
-  //   @BeforeInsert()
-  //   checkFieldsBeforeInsert() {
-  //     this.email = this.email.toLocaleLowerCase().trim();
-  //   }
-
-  //   @BeforeUpdate()
-  //   checkFieldsBeforeUpdate() {
-  //     this.checkFieldsBeforeInsert();
-  //   }
+  @BeforeUpdate()
+  checkFieldsBeforeUpdate() {
+    this.checkFieldsBeforeInsert();
+  }
 }

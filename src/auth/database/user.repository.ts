@@ -1,6 +1,7 @@
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+
 import { TypeOrmAdapter } from '../../database/utils/typeorm-adapter.repository';
 import { User } from '../entities';
 

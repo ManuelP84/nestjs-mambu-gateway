@@ -13,6 +13,8 @@ import { GetClientsQuery } from './queries/get-clients/get-clients.query';
 import { CreateClientLoanCommand } from './commands/create-client-loan/create-client-loan.command';
 import { CreateClientLoanDto } from './dto/create-client-loan/create-client-loan.dto';
 import { Client } from './entities/client/client.entity';
+import { Auth } from '../auth/decorators';
+import { ValidRoles } from '../auth/enums';
 
 @Controller('clients')
 export class ClientsController {
@@ -22,6 +24,7 @@ export class ClientsController {
   ) {}
 
   @Post()
+  @Auth(ValidRoles.user)
   async createClient(
     @Body() createClientDto: CreateClientDto,
   ): Promise<Client> {
@@ -34,6 +37,7 @@ export class ClientsController {
   }
 
   @Post('loan')
+  @Auth(ValidRoles.user)
   async createClientLoan(
     @Body() createClientLoanDto: CreateClientLoanDto,
   ): Promise<void> {
@@ -46,6 +50,7 @@ export class ClientsController {
   }
 
   @Get()
+  @Auth(ValidRoles.user)
   findAll(): Promise<ResponseClientDto[]> {
     /**
      * Retrive all clients

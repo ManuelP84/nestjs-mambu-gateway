@@ -7,11 +7,14 @@ import { ChangeStateDto } from './dtos/change-state/change-state.dto';
 import { ChangeStateCommand } from './commands/change-state/change-state.command';
 import { ResponseChangeStateDto } from './dtos/response-change-state.dto';
 import { Loan } from './entities/loan/loan.entity';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { ValidRoles } from '../auth/enums/valid-roles.enum';
 
 @Controller('loans')
 export class LoansController {
   constructor(private readonly commandBus: CommandBus) {}
 
+  @Auth(ValidRoles.user)
   @Post()
   async create(@Body() createLoanDto: CreateLoanDto): Promise<Loan> {
     /**
@@ -22,6 +25,7 @@ export class LoansController {
     );
   }
 
+  @Auth(ValidRoles.user)
   @Post('changeState/:loanAccountId')
   async changeState(
     /**
@@ -29,9 +33,10 @@ export class LoansController {
      */
     @Body() changeStateDto: ChangeStateDto,
     @Param('loanAccountId') loanAccountId: string,
-    ): Promise<ResponseChangeStateDto> {
-    return await this.commandBus.execute<ChangeStateCommand, ResponseChangeStateDto>(
-      new ChangeStateCommand(changeStateDto, loanAccountId),
-    );
+  ): Promise<ResponseChangeStateDto> {
+    return await this.commandBus.execute<
+      ChangeStateCommand,
+      ResponseChangeStateDto
+    >(new ChangeStateCommand(changeStateDto, loanAccountId));
   }
 }
