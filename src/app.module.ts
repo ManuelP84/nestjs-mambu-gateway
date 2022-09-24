@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { LoansModule } from './loans/loans.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { DepositsModule } from './deposits/deposits.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
     ClientsModule, 
     CommonModule, 
     AuthModule, 
-    LoansModule,
+    LoansModule, DepositsModule,
   ],
 })
 export class AppModule {}

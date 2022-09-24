@@ -1,4 +1,4 @@
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 
@@ -8,6 +8,7 @@ import { AxiosAdapter } from '../../../common/providers/axios.adapter';
 import { ClientFactory } from '../../factories/create-client.factory';
 import { Client } from '../../entities/client/client.entity';
 import { getHeaders } from '../../../common/helpers';
+import { ClientCreatedEvent } from '../../events/client-created/client-created.event';
 
 @CommandHandler(CreateClientCommand)
 export class CreateClientHandler implements ICommandHandler {
@@ -15,10 +16,11 @@ export class CreateClientHandler implements ICommandHandler {
     public readonly configService: ConfigService,
     private readonly axios: AxiosAdapter,
     private readonly eventPublisher: EventPublisher,
+    private readonly eventBus: EventBus,
     private readonly clientFactory: ClientFactory,
   ) {}
 
-  async execute(command: CreateClientCommand): Promise<Client> {
+  async execute(command: CreateClientCommand): Promise<void> {
     const logger = new Logger(CreateClientHandler.name);
     logger.log('Creating a new client...');
     const { createClientDto } = command;
@@ -32,12 +34,21 @@ export class CreateClientHandler implements ICommandHandler {
       },
     );
 
-    const client = this.eventPublisher.mergeObjectContext(
-      this.clientFactory.create(data),
-    );
+    if(!!data.encodedKey){
+      console.log("New publisher!!!");
+      
+      this.eventBus.publish(new ClientCreatedEvent(data.encodedKey, data.firstName, data.lastName));
+    }
 
-    client.commit();
+    // TODO: Cambiar el factory y emitir eventos manualmente
+    // TODO: Crear DTO con toda la info cliente- deposito- retiro...
 
-    return client;
+    // const client = this.eventPublisher.mergeObjectContext(
+    //   this.clientFactory.create(data),
+    // );
+
+    // client.commit();
+
+    // return data;
   }
 }

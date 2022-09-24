@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
@@ -14,6 +14,7 @@ export class ChangeStateHandler implements ICommandHandler {
     private readonly axios: AxiosAdapter,
   ) {}
   async execute(command: ChangeStateCommand): Promise<ResponseChangeStateDto> {
+    throw new BadRequestException();
     const logger = new Logger(ChangeStateHandler.name);
     const { changeStateDto } = command;
     const { loanAccountId } = command;

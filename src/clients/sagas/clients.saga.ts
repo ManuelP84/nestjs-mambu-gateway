@@ -1,31 +1,57 @@
-import { delay, map, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Injectable, Logger } from '@nestjs/common';
-import { ICommand, ofType, Saga } from '@nestjs/cqrs';
+import { from, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { CommandBus, ICommand, ofType, Saga } from '@nestjs/cqrs';
 
 import { ClientLoanCreatedEvent } from '../events';
 import { ChangeStateCommand } from '../../loans/commands/change-state/change-state.command';
 import { ChangeStateDto } from '../../loans/dtos/change-state/change-state.dto';
-import { Response } from 'express';
+import { Client } from '../entities/client/client.entity';
 
 @Injectable()
 export class ClientSagas {
+  constructor(
+    private readonly commandBus: CommandBus
+    ) {}
   @Saga()
-  ClientLoanCreated = (events: Observable<any>, res: Response): Observable<ICommand> => {
+  ClientLoanCreated = (
+    events$: Observable<any>
+  ): Observable<any> => {
     const logger = new Logger(ClientSagas.name);
-    return events.pipe(
+    return events$.pipe(
       ofType(ClientLoanCreatedEvent),
-      delay(5000),
-      map((event) => {
+      switchMap((event$) => {
         logger.log('Saga called ChangeStateCommand');
-        return new ChangeStateCommand(
-          { action: 'APPROVE' } as ChangeStateDto,
-          event.loanId,
+        return from(
+          this.commandBus.execute<ChangeStateCommand, Client>(
+            new ChangeStateCommand(
+              { action: 'APPROVE' } as ChangeStateDto,
+              event$.loanId,
+            ),
+          ),
+        ).pipe(
+          map((data) => {
+            return new BadRequestException("Error")
+            //console.log(data);
+            ;
+          }),
+          catchError(err => of(err)),
+          
+          ofType(BadRequestException),
+          tap(() => console.log("si"),
+          )
         );
       }),
-      catchError((error) => {
-        return error;        
+      
+      catchError(err => throwError(() => new Error('Error!!!!!!!!!!!!!!'))),
+      map((data) => {
+        //console.log(data);
+        //return data;
       }),
+      // catchError((error) => {
+      //   return error;
+      // }),
+      //catchError(err => throwError(() => new BadRequestException())),
     );
   };
 }

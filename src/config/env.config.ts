@@ -6,6 +6,7 @@ export const EnvConfig = () => ({
     baseUrl: process.env.BASE_URL,
     urlClients: process.env.URL_CLIENTS,
     urlLoans: process.env.URL_LOANS,
+    urlDeposits: process.env.URL_DEPOSITS,
     // Postgres
     postgresPort: parseInt(process.env.POSTGRES_PORT),
     postgresUsername: process.env.POSTGRES_USERNAME,
@@ -16,9 +17,8 @@ export const EnvConfig = () => ({
     mongoConnection: process.env.MONGO_CONNECTION,
     mongoConnectionAtlas: process.env.MONGO_CONNECTION_ATLAS,
     // JWT
-    key: process.env.HEY,
+    key: process.env.KEY,
     refreshKey: process.env.REFRESH_KEY,
     atExpiresIn: process.env.AT_EXPIRES_IN,
     rtExpiresIn: process.env.RT_EXPIRES_IN,
-
 })

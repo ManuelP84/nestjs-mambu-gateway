@@ -23,7 +23,7 @@ export class ClientFactory {
       data.encodedKey,
     );
     client.apply(
-      new ClientCreatedEvent(client.id, client.firstNam, client.lastNam),
+      new ClientCreatedEvent(client.encodedKey, client.firstNam, client.lastNam),
     );
     return client;
   }

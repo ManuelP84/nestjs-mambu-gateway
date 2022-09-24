@@ -40,7 +40,7 @@ export class ClientsController {
   @Auth(ValidRoles.user)
   async createClientLoan(
     @Body() createClientLoanDto: CreateClientLoanDto,
-  ): Promise<void> {
+  ) {
     /**
      * Create a new client and asign a loan account
      */
