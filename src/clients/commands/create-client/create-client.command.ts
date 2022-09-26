@@ -14,6 +14,7 @@ export class CreateClientCommand {
       depositInfo: DepositTransactionDto;
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { ConfigService } from '@nestjs/config';
 import { Logger, BadRequestException } from '@nestjs/common';
@@ -22,10 +23,16 @@ export class CreateClientHandler implements ICommandHandler {
     logger.log('Creating a new client...');
     const { createClientDto, data } = command;
     const { accountInfo, ...restInfo } = data;
+    const createClientInfoUpdated = {
+      ...createClientDto,
+      _personalizados: {
+        External_ID: uuid()
+      }
+    }
     const headers = getHeaders(this.configService);
     const clientResponse = await this.axios.post<ResponseClientDto>(
       this.configService.get('urlClients'),
-      createClientDto,
+      createClientInfoUpdated,
       {
         headers,
         baseURL: this.configService.get('baseUrl'),
@@ -40,6 +47,25 @@ export class CreateClientHandler implements ICommandHandler {
       ...accountInfo,
       accountHolderKey: clientResponse.encodedKey,
     };
+
+    // const {
+    //   transferInfo: { transferDetails },
+    // } = data;
+    // const transferDetailsUpdated = {
+    //   ...transferDetails,
+    //   linkedAccountId: clientResponse.id,
+    //   linkedAccountKey: clientResponse.encodedKey,
+    // };
+    // const transferInfoUpdated = {
+    //   ...transferInfo,
+    //   transferDetails: transferDetailsUpdated,
+    // };
+
+    // const restInfoUpdated = {
+    //   ...restInfo,
+    //   transferInfo: transferInfoUpdated,
+    // };
+
     logger.log('Client created event published');
     this.eventBus.publish(new ClientCreatedEvent(clientResponse));
 

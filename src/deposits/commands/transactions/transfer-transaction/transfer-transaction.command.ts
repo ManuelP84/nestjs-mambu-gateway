@@ -1,4 +1,8 @@
 import { TransferTransactionDto } from '../../../dto';
-export class TransferTransactionCommand {
-    constructor(public readonly transferTransactionDto: TransferTransactionDto){}
+
+export class MakeTransferCommand {
+    constructor(
+        public readonly transferTransactionDto: TransferTransactionDto,
+        public readonly transferAccount: string,
+        ){}
 }

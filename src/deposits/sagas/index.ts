@@ -1,3 +1,3 @@
 import { DepositTransactionSagas } from './deposit-transactions.saga';
 
-export const depositSagas = [DepositTransactionSagas];
+export const depositSagas = [DepositTransactionSagas,];

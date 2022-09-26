@@ -14,6 +14,7 @@ export class CreateClientEvent {
       depositInfo: DepositTransactionDto;
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

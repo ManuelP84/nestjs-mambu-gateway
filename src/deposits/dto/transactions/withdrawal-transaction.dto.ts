@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 
 class TransactionDetails {
   @IsString()

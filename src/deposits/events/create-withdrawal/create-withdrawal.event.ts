@@ -1,4 +1,4 @@
-import { TransferTransactionDto, WithdrawalTransactionDto } from "../../dto";
+import { TransferTransactionDto, WithdrawalTransactionDto } from '../../dto';
 
 export class CreateWithdrawalEvent {
   constructor(
@@ -6,6 +6,7 @@ export class CreateWithdrawalEvent {
     public readonly destinyAccount: string,
     public readonly data?: {
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

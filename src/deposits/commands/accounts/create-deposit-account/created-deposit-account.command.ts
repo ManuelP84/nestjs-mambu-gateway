@@ -4,6 +4,7 @@ import {
   TransferTransactionDto,
   WithdrawalTransactionDto,
 } from '../../../dto';
+
 export class CreateDepositAccountCommand {
   constructor(
     public readonly createDepositAccountDto: CreateDepositAccountDto,
@@ -11,6 +12,7 @@ export class CreateDepositAccountCommand {
       depositInfo: DepositTransactionDto;
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

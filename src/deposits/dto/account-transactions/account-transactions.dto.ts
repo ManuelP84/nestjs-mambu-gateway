@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
+
 import { CreateClientDto } from '../../../clients/dto/create-client/create-client.dto';
 import {
   CreateDepositAccountDto,
@@ -33,4 +34,7 @@ export class AccountTransactionsDto {
   @IsNotEmpty()
   @Type(() => TransferTransactionDto)
   transferInfo: TransferTransactionDto;
+
+  @IsString()
+  transferAccount: string;
 }

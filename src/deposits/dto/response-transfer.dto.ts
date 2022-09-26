@@ -1,4 +1,4 @@
-export class ResponseDepositDto {
+export class ResponseTransferDto {
     accountBalances:          AccountBalances;
     adjustmentTransactionKey: string;
     affectedAmounts:          AffectedAmounts;
@@ -181,4 +181,3 @@ interface TransferDetails {
     linkedDepositTransactionKey: string;
     linkedLoanTransactionKey:    string;
 }
-

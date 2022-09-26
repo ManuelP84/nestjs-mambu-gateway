@@ -1,5 +1,6 @@
 import { CreateDepositAccountHandler } from './accounts/create-deposit-account/create-deposit-account.handler';
 import { DepositTransactionHandler } from './transactions/deposit-transaction/deposit-transaction.handler';
+import { TransferTransactionHandler } from './transactions/transfer-transaction/transfer-transaction.handler';
 import { WithdrawalTransactionHandler } from './transactions/withdrawal-transaction/withdrawal-transaction.handler';
 
 // Commands
@@ -13,4 +14,5 @@ export const depositTransactionHandlers = [
   CreateDepositAccountHandler,
   DepositTransactionHandler,
   WithdrawalTransactionHandler,
+  TransferTransactionHandler,
 ];

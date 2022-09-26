@@ -11,6 +11,7 @@ export class MakeDepositCommand {
     public readonly data?: {
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

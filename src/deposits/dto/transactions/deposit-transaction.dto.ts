@@ -1,12 +1,18 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 
 class TransactionDetails {
   @IsString()
   transactionChannelId: string;
 }
 
-export class DepositTransactionDto {  
+export class DepositTransactionDto {
   @IsNumber()
   amount: number;
 
@@ -33,4 +39,3 @@ export class DepositTransactionDto {
   @IsOptional()
   valueDate: string;
 }
-

@@ -3,6 +3,7 @@ import {
   TransferTransactionDto,
   WithdrawalTransactionDto,
 } from '../../dto';
+
 export class CreateDepositEvent {
   constructor(
     public readonly createDepositInfoDto: DepositTransactionDto,
@@ -10,6 +11,7 @@ export class CreateDepositEvent {
     public readonly data?: {
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

@@ -7,3 +7,4 @@ export * from './account-transactions/account-transactions.dto';
 export * from './response-deposit-account.dto';
 export * from './response-deposit.dto';
 export * from './response-withdrawal.dto';
+export * from './response-transfer.dto';

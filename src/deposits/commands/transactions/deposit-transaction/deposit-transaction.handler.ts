@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -6,7 +7,11 @@ import { getHeaders } from '../../../../common/helpers';
 import { MakeDepositCommand } from '../../transactions/deposit-transaction/deposit-transaction.command';
 import { AxiosAdapter } from '../../../../common/providers/axios.adapter';
 import { ResponseDepositDto } from '../../../dto';
-import { DepositCreatedEvent, CreateWithdrawalEvent } from '../../../events';
+import {
+  DepositCreatedEvent,
+  CreateWithdrawalEvent,
+  CreateTransferEvent,
+} from '../../../events';
 
 @CommandHandler(MakeDepositCommand)
 export class DepositTransactionHandler implements ICommandHandler {
@@ -19,14 +24,18 @@ export class DepositTransactionHandler implements ICommandHandler {
     const logger = new Logger(DepositTransactionHandler.name);
     logger.log('Making a deposit...');
     const { depositTransactionDto, data, destinyAccount } = command;
-    const { withdrawalInfo, ...restInfo } = data;
+    const { withdrawalInfo, transferInfo, transferAccount } = data;
+    const depositTransactionDtoUpdated = {
+      ...depositTransactionDto,
+      externalId: uuid()
+    }
     const headers = getHeaders(this.configService);
 
     const depositResponse = await this.axios.post<ResponseDepositDto>(
       `${this.configService.get(
         'urlDeposits',
       )}${destinyAccount}/deposit-transactions`,
-      depositTransactionDto,
+      depositTransactionDtoUpdated,
       {
         headers,
         baseURL: this.configService.get('baseUrl'),
@@ -39,12 +48,17 @@ export class DepositTransactionHandler implements ICommandHandler {
       );
     }
 
-    logger.log(`Deposit ${depositResponse.amount}$ successfully to the account`);
-    this.eventBus.publish(
-      new DepositCreatedEvent(depositResponse),
-    );
-    
+    logger.log(`Successful deposit of ${depositResponse.amount}$ to the account`);
+    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
+
     logger.log('Create withdrawal event published');
-    this.eventBus.publish(new CreateWithdrawalEvent(withdrawalInfo, destinyAccount, restInfo));
+    this.eventBus.publish(
+      new CreateWithdrawalEvent(withdrawalInfo, destinyAccount),
+    );
+
+    logger.log('Create transfer event published');
+    this.eventBus.publish(
+      new CreateTransferEvent(transferInfo, transferAccount),
+    );
   }
 }

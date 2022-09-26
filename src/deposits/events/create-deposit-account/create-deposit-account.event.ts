@@ -12,6 +12,7 @@ export class CreateDepositAccountEvent {
       depositInfo: DepositTransactionDto;
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
+      transferAccount: string;
     },
   ) {}
 }

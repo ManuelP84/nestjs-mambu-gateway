@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { Logger, BadRequestException } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
@@ -22,9 +23,9 @@ export class CreateDepositAccountHandler implements ICommandHandler {
     const logger = new Logger(CreateDepositAccountHandler.name);
     logger.log('Creating new deposit account...');
     const { createDepositAccountDto, data } = command;
-    const { depositInfo, ...restInfo } = data;
+    const { depositInfo, transferInfo, ...restInfo } = data;
     const headers = getHeaders(this.configService);
-    
+
     const depositAccountResponse =
       await this.axios.post<DepositAccountResponseDto>(
         this.configService.get('urlDeposits'),
@@ -41,13 +42,34 @@ export class CreateDepositAccountHandler implements ICommandHandler {
       );
     }
 
+    const {
+      transferInfo: { transferDetails },
+    } = data;
+    const transferDetailsUpdated = {
+      ...transferDetails,
+      linkedAccountId: depositAccountResponse.id,
+      linkedAccountKey: depositAccountResponse.encodedKey,
+    };
+    const transferInfoUpdated = {
+      ...transferInfo,
+      transferDetails: transferDetailsUpdated,
+      externalId: uuid(),
+    };
+
+    const restInfoUpdated = {
+      ...restInfo,
+      transferInfo: transferInfoUpdated,
+    };
+
     logger.log('Deposit account created event published');
     this.eventBus.publish(
       new DepositAccountCreatedEvent(depositAccountResponse),
     );
-    
+
     const destityAccount = depositAccountResponse.id;
     logger.log('Create deposit event published');
-    this.eventBus.publish(new CreateDepositEvent(depositInfo, destityAccount, restInfo));
+    this.eventBus.publish(
+      new CreateDepositEvent(depositInfo, destityAccount, restInfoUpdated),
+    );
   }
 }
