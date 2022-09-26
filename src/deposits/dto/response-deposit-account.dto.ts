@@ -1,4 +1,4 @@
-export class ResponseDepositAccountDto {
+export class DepositAccountResponseDto {
     encodedKey:                string;
     creationDate:              string;
     lastModifiedDate:          string;

@@ -18,10 +18,10 @@ export class ClientCreatedHandler implements IEventHandler<ClientCreatedEvent> {
 
     const { encodedKey, firstName, lastName } = event.clientResponse;
             
-    await this.clientCreatedRepository.create({
-      encodedKey,
-      firstName,
-      lastName,
-    } as ClientDocument,);
+    // await this.clientCreatedRepository.create({
+    //   encodedKey,
+    //   firstName,
+    //   lastName,
+    // } as ClientDocument,);
   }
 }

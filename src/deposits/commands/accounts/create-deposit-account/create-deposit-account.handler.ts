@@ -1,24 +1,32 @@
 import { ConfigService } from '@nestjs/config';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { Logger, BadRequestException } from '@nestjs/common';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+
 import { AxiosAdapter } from '../../../../common/providers/axios.adapter';
 import { CreateDepositAccountCommand } from './created-deposit-account.command';
-import { ResponseDepositAccountDto } from '../../../dto/response-deposit-account.dto';
-import { Logger } from '@nestjs/common';
+import { DepositAccountResponseDto } from '../../../dto';
 import { getHeaders } from '../../../../common/helpers/get-headers.helper';
+import {
+  CreateDepositEvent,
+  DepositAccountCreatedEvent,
+} from '../../../events';
 
 @CommandHandler(CreateDepositAccountCommand)
 export class CreateDepositAccountHandler implements ICommandHandler {
   constructor(
     public readonly configService: ConfigService,
     private readonly axios: AxiosAdapter,
-    private readonly eventPublisher: EventPublisher,
+    private readonly eventBus: EventBus,
   ) {}
-  async execute(command: CreateDepositAccountCommand): Promise<ResponseDepositAccountDto> {
+  async execute(command: CreateDepositAccountCommand): Promise<void> {
     const logger = new Logger(CreateDepositAccountHandler.name);
-    logger.log('Creating a new client...');
-    const { createDepositAccountDto } = command;
+    logger.log('Creating new deposit account...');
+    const { createDepositAccountDto, data } = command;
+    const { depositInfo, ...restInfo } = data;
     const headers = getHeaders(this.configService);
-    const data = await this.axios.post<ResponseDepositAccountDto>(
+    
+    const depositAccountResponse =
+      await this.axios.post<DepositAccountResponseDto>(
         this.configService.get('urlDeposits'),
         createDepositAccountDto,
         {
@@ -26,6 +34,20 @@ export class CreateDepositAccountHandler implements ICommandHandler {
           baseURL: this.configService.get('baseUrl'),
         },
       );
-    return;
+
+    if (!depositAccountResponse.encodedKey) {
+      throw new BadRequestException(
+        'Something went wrong - (create deposit account)',
+      );
+    }
+
+    logger.log('Deposit account created event published');
+    this.eventBus.publish(
+      new DepositAccountCreatedEvent(depositAccountResponse),
+    );
+    
+    const destityAccount = depositAccountResponse.id;
+    logger.log('Create deposit event published');
+    this.eventBus.publish(new CreateDepositEvent(depositInfo, destityAccount, restInfo));
   }
 }

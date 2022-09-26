@@ -31,6 +31,6 @@ export class DepositsService {
 
   async accountTransaction(accountTransactionDto: AccountTransactionsDto){
     const { clientInfo, ...restInfo } = accountTransactionDto;
-    await this.eventBus.publish<CreateClientEvent>(new CreateClientEvent(clientInfo, restInfo));
+    await this.eventBus.publish(new CreateClientEvent(clientInfo, restInfo));
   }
 }

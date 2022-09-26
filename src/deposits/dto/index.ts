@@ -4,3 +4,5 @@ export * from './transactions/transfer-transaction.dto';
 export * from './accounts/update-deposit.dto';
 export * from './transactions/withdrawal-transaction.dto';
 export * from './account-transactions/account-transactions.dto';
+export * from './response-deposit-account.dto';
+export * from './response-deposit.dto';

@@ -1,14 +1,13 @@
 import {
-  CreateDepositAccountDto,
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
-} from '../../../dto';
-export class CreateDepositAccountCommand {
+} from '../../dto';
+export class CreateDepositEvent {
   constructor(
-    public readonly createDepositAccountDto: CreateDepositAccountDto,
+    public readonly createDepositInfoDto: DepositTransactionDto,
+    public readonly destinyAccount: string,
     public readonly data?: {
-      depositInfo: DepositTransactionDto;
       withdrawalInfo: WithdrawalTransactionDto;
       transferInfo: TransferTransactionDto;
     },

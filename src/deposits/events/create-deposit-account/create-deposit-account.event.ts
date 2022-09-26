@@ -3,8 +3,9 @@ import {
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
-} from '../../../dto';
-export class CreateDepositAccountCommand {
+} from '../../dto';
+
+export class CreateDepositAccountEvent {
   constructor(
     public readonly createDepositAccountDto: CreateDepositAccountDto,
     public readonly data?: {
