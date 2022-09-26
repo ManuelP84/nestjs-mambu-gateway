@@ -1,4 +1,5 @@
-import { IsDate, IsNumber, IsString, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 class TransferDetails {
   @IsString()
@@ -15,13 +16,15 @@ export class TransferTransactionDto {
   @IsNumber()
   amount: number;
 
-  @IsString()
+  @ValidateNested()
+  @Type(() => TransferDetails)
   transferDetails: TransferDetails;
 
   @IsString()
   notes: string;
 
   @IsString()
+  @IsOptional()
   paymentOrderId: string;
 
   @IsString()
@@ -29,6 +32,6 @@ export class TransferTransactionDto {
   externalId: string;
 
   @IsString()
-  @IsDate()
+  @IsOptional()
   valueDate: string;
 }

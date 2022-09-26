@@ -6,13 +6,13 @@ export class ClientCreated{
   @Prop({
     unique: true,
   })
-  clientId: string;
+  encodedKey: string;
 
   @Prop()
-  clientName: string;
+  firstName: string;
 
   @Prop()
-  clientLastName: string;
+  lastName: string;
 }
 
 export type ClientDocument = ClientCreated & Document;

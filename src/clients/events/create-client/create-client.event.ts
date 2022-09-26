@@ -1,13 +1,14 @@
+import { CreateClientDto } from '../../dto';
 import {
   CreateDepositAccountDto,
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
 } from '../../../deposits/dto';
-import { ResponseClientDto } from '../../dto/response-client.dto';
-export class ClientCreatedEvent {
+
+export class CreateClientEvent {
   constructor(
-    public readonly clientResponse: ResponseClientDto,
+    public readonly createClientDto: CreateClientDto,
     public readonly data?: {
       accountInfo: CreateDepositAccountDto;
       depositInfo: DepositTransactionDto;

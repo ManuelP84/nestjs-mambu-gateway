@@ -2,7 +2,6 @@ import { IsString, IsUUID } from "class-validator"
 
 export class CreateDepositAccountDto {    
     @IsString()
-    @IsUUID()
     accountHolderKey:  string
 
     @IsString()
@@ -12,7 +11,6 @@ export class CreateDepositAccountDto {
     name:              string
 
     @IsString()
-    @IsUUID()
     productTypeKey:    string
 
     @IsString()

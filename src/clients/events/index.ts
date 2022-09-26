@@ -7,3 +7,4 @@ export const ClientEventHandlers = [ClientCreatedHandler, ClientLoanCreatedHandl
 // Events
 export * from './client-created/client-created.event'
 export * from './client-loan-created/client-loan-created.event';
+export * from './create-client/create-client.event';

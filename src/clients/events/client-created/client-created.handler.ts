@@ -13,9 +13,15 @@ export class ClientCreatedHandler implements IEventHandler<ClientCreatedEvent> {
   async handle(event: ClientCreatedEvent) {
     const logger = new Logger(ClientCreatedHandler.name);
     logger.log(
-      `Client: ${event.clientName} ${event.clientLastName} :: Id: ${event.clientId} created`,
+      `Client: ${event.clientResponse.firstName} ${event.clientResponse.lastName} :: Id: ${event.clientResponse.encodedKey} created`,
     );
+
+    const { encodedKey, firstName, lastName } = event.clientResponse;
             
-    await this.clientCreatedRepository.create(event as ClientDocument,);
+    await this.clientCreatedRepository.create({
+      encodedKey,
+      firstName,
+      lastName,
+    } as ClientDocument,);
   }
 }

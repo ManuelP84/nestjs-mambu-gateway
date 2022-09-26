@@ -1,15 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { Saga, ICommand, ofType } from '@nestjs/cqrs';
 import { map, Observable } from 'rxjs';
-import { ClientCreatedEvent } from "../../clients/events/client-created/client-created.event";
+import { CreateClientEvent } from "../../clients/events";
+import { CreateClientCommand } from '../../clients/commands';
 
 @Injectable()
 export class DepositTransactionSagas {
     @Saga()
-    createdClient = (events$: Observable<ClientCreatedEvent>): Observable<ICommand> => {
+    createdClient = (events$: Observable<CreateClientEvent>): Observable<ICommand> => {
         return events$.pipe(
-            ofType(ClientCreatedEvent),
-            //map((event) => new CreateDepositAccountCommand()),
+            ofType(CreateClientEvent),
+            map((event) => new CreateClientCommand(event.createClientDto, event.data)),
         )
     } 
 }

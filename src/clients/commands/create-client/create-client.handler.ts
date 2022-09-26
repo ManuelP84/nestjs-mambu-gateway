@@ -5,7 +5,6 @@ import { Logger } from '@nestjs/common';
 import { CreateClientCommand } from './create-client.command';
 import { ResponseClientDto } from '../../dto';
 import { AxiosAdapter } from '../../../common/providers/axios.adapter';
-import { ClientFactory } from '../../factories/create-client.factory';
 import { Client } from '../../entities/client/client.entity';
 import { getHeaders } from '../../../common/helpers';
 import { ClientCreatedEvent } from '../../events/client-created/client-created.event';
@@ -17,15 +16,14 @@ export class CreateClientHandler implements ICommandHandler {
     private readonly axios: AxiosAdapter,
     private readonly eventPublisher: EventPublisher,
     private readonly eventBus: EventBus,
-    private readonly clientFactory: ClientFactory,
   ) {}
 
   async execute(command: CreateClientCommand): Promise<void> {
     const logger = new Logger(CreateClientHandler.name);
     logger.log('Creating a new client...');
-    const { createClientDto } = command;
+    const { createClientDto, data } = command;
     const headers = getHeaders(this.configService);
-    const data = await this.axios.post<ResponseClientDto>(
+    const clientResponse = await this.axios.post<ResponseClientDto>(
       this.configService.get('urlClients'),
       createClientDto,
       {
@@ -34,10 +32,13 @@ export class CreateClientHandler implements ICommandHandler {
       },
     );
 
-    if(!!data.encodedKey){
+    console.log(clientResponse);
+    
+
+    if(!!clientResponse.encodedKey){
       console.log("New publisher!!!");
       
-      this.eventBus.publish(new ClientCreatedEvent(data.encodedKey, data.firstName, data.lastName));
+      this.eventBus.publish(new ClientCreatedEvent(clientResponse, data));
     }
 
     // TODO: Cambiar el factory y emitir eventos manualmente

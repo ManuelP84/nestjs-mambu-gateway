@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 class TransactionDetails {
   @IsString()
@@ -18,6 +18,7 @@ export class WithdrawalTransactionDto {
   notes: string;
 
   @IsString()
+  @IsOptional()
   paymentOrderId: string;
 
   @IsString()
@@ -28,5 +29,6 @@ export class WithdrawalTransactionDto {
   bookingDate: string;
 
   @IsString()
+  @IsOptional()
   valueDate: string;
 }
