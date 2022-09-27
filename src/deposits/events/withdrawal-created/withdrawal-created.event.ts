@@ -1,4 +1,4 @@
-import { ResponseWithdrawalDto } from '../../dto/response-withdrawal.dto';
+import { ResponseWithdrawalDto } from '../../dto/responses/response-withdrawal.dto';
 
 export class WithdrawalCreatedEvent {
     constructor(

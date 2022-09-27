@@ -1,4 +1,4 @@
-import { DepositAccountResponseDto } from '../../dto/response-deposit-account.dto';
+import { DepositAccountResponseDto } from '../../dto/responses/response-deposit-account.dto';
 
 export class DepositAccountCreatedEvent {
   constructor(
