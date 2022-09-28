@@ -11,6 +11,7 @@ import {
   CreateDepositEvent,
   DepositAccountCreatedEvent,
 } from '../../../events';
+import { Flags } from '../../../../common/enums';
 
 @CommandHandler(CreateDepositAccountCommand)
 export class CreateDepositAccountHandler implements ICommandHandler {
@@ -25,7 +26,7 @@ export class CreateDepositAccountHandler implements ICommandHandler {
     const { createDepositAccountDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
-    if (flag === 'TEST') {
+    if (flag === Flags.TEST) {
       createDepositAccountDto.accountHolderKey = data.clientEncodekey;
     }
 
@@ -44,7 +45,7 @@ export class CreateDepositAccountHandler implements ICommandHandler {
     );
     logger.log(`Deposit account :: ${depositAccountResponse.id} created`);
 
-    if (flag === 'TEST') {
+    if (flag === Flags.TEST) {
       data.linkedAccountId = depositAccountResponse.id;
       data.linkedAccountKey = depositAccountResponse.encodedKey;
       this.eventBus.publish(

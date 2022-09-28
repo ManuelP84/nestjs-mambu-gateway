@@ -9,6 +9,7 @@ import { getHeaders } from '../../../common/helpers';
 import { ClientCreatedEvent } from '../../events';
 import { CreateDepositAccountEvent } from '../../../deposits/events';
 import { getAccountTest } from '../../../deposits/helpers';
+import { Flags } from '../../../common/enums';
 
 @CommandHandler(CreateClientCommand)
 export class CreateClientHandler implements ICommandHandler {
@@ -35,13 +36,13 @@ export class CreateClientHandler implements ICommandHandler {
 
     this.eventBus.publish(new ClientCreatedEvent(clientResponse));
 
-    if(flag === 'TEST'){
+    if(flag === Flags.TEST){
       const data = {
         clietnId: clientResponse.id,
         clientEncodekey: clientResponse.encodedKey,
       };
       this.eventBus.publish(
-        new CreateDepositAccountEvent(getAccountTest(), 'TEST', data),
+        new CreateDepositAccountEvent(getAccountTest(), flag, data),
       );
     }
   }

@@ -8,6 +8,7 @@ import {
 } from './dto';
 import { CreateClientEvent } from '../clients/events/create-client/create-client.event';
 import { getTestClient } from '../clients/helpers';
+import { Flags } from '../common/enums/flags.enum';
 
 @Injectable()
 export class DepositsService {
@@ -30,6 +31,6 @@ export class DepositsService {
 
   async clientTransactions(){
     const newClient = getTestClient();
-    await this.eventBus.publish(new CreateClientEvent(newClient, 'TEST'));
+    await this.eventBus.publish(new CreateClientEvent(newClient, Flags.TEST));
   }
 }

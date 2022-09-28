@@ -7,6 +7,7 @@ import { MakeTransferCommand } from './transfer-transaction.command';
 import { ResponseTransferDto } from '../../../dto';
 import { getTransferFromAccountTest } from 'src/deposits/helpers';
 import { TransferCreatedEvent } from '../../../events';
+import { Flags } from '../../../../common/enums';
 
 @CommandHandler(MakeTransferCommand)
 export class TransferTransactionHandler implements ICommandHandler {
@@ -21,7 +22,7 @@ export class TransferTransactionHandler implements ICommandHandler {
     const { transferTransactionDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
-    if (flag === 'TEST') {
+    if (flag === Flags.TEST) {
       transferTransactionDto.transferDetails.linkedAccountId =
         data.linkedAccountId;
       transferTransactionDto.transferDetails.linkedAccountKey =

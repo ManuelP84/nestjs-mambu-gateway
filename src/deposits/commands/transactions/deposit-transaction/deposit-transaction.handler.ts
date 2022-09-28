@@ -12,6 +12,7 @@ import {
   CreateWithdrawalEvent,
   CreateTransferEvent,
 } from '../../../events';
+import { Flags } from '../../../../common/enums';
 
 @CommandHandler(MakeDepositCommand)
 export class DepositTransactionHandler implements ICommandHandler {
@@ -36,17 +37,17 @@ export class DepositTransactionHandler implements ICommandHandler {
         baseURL: this.configService.get('baseUrl'),
       },
     );
-    
-    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
-    logger.log(`Deposit successful :: ${depositResponse.amount}$ to the account`);
 
-    if(flag === 'TEST'){
-      this.eventBus.publish(
+    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
+    logger.log(
+      `Deposit successful :: ${depositResponse.amount}$ to the account`,
+    );
+
+    if (flag === Flags.TEST) {
+      this.eventBus.publishAll([
         new CreateWithdrawalEvent(getWithdrawalTest(), 'TEST', data),
-      );      
-      this.eventBus.publish(
         new CreateTransferEvent(getTransferTest(), 'TEST', data),
-      );
+      ]);
     }
   }
 }
