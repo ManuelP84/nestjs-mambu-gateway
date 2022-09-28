@@ -1,5 +1,4 @@
-import { v4 as uuid } from 'uuid';
-import { BadRequestException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
@@ -7,6 +6,7 @@ import { getHeaders } from '../../../../common/helpers';
 import { MakeDepositCommand } from '../../transactions/deposit-transaction/deposit-transaction.command';
 import { AxiosAdapter } from '../../../../common/providers/axios.adapter';
 import { ResponseDepositDto } from '../../../dto';
+import { getTransferTest, getWithdrawalTest } from '../../../helpers';
 import {
   DepositCreatedEvent,
   CreateWithdrawalEvent,
@@ -23,42 +23,30 @@ export class DepositTransactionHandler implements ICommandHandler {
   async execute(command: MakeDepositCommand): Promise<void> {
     const logger = new Logger(DepositTransactionHandler.name);
     logger.log('Making a deposit...');
-    const { depositTransactionDto, data, destinyAccount } = command;
-    const { withdrawalInfo, transferInfo, transferAccount } = data;
-    const depositTransactionDtoUpdated = {
-      ...depositTransactionDto,
-      externalId: uuid()
-    }
+    const { depositTransactionDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
     const depositResponse = await this.axios.post<ResponseDepositDto>(
-      `${this.configService.get(
-        'urlDeposits',
-      )}${destinyAccount}/deposit-transactions`,
-      depositTransactionDtoUpdated,
+      `${this.configService.get('urlDeposits')}${
+        data.linkedAccountId
+      }/deposit-transactions`,
+      depositTransactionDto,
       {
         headers,
         baseURL: this.configService.get('baseUrl'),
       },
     );
+    
+    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
+    logger.log(`Deposit successful :: ${depositResponse.amount}$ to the account`);
 
-    if (!depositResponse.encodedKey) {
-      throw new BadRequestException(
-        'Something went wrong - (create deposit account)',
+    if(flag === 'TEST'){
+      this.eventBus.publish(
+        new CreateWithdrawalEvent(getWithdrawalTest(), 'TEST', data),
+      );      
+      this.eventBus.publish(
+        new CreateTransferEvent(getTransferTest(), 'TEST', data),
       );
     }
-
-    logger.log(`Successful deposit of ${depositResponse.amount}$ to the account`);
-    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
-
-    logger.log('Create withdrawal event published');
-    this.eventBus.publish(
-      new CreateWithdrawalEvent(withdrawalInfo, destinyAccount),
-    );
-
-    logger.log('Create transfer event published');
-    this.eventBus.publish(
-      new CreateTransferEvent(transferInfo, transferAccount),
-    );
   }
 }

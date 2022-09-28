@@ -1,6 +1,7 @@
 import { BadRequestException, Logger, ValidationError, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { getTestClient } from './clients/helpers/get-test-client.helper';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {

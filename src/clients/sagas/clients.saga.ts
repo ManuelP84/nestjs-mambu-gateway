@@ -20,15 +20,13 @@ export class ClientSagas {
       delay(1000),
       ofType(CreateClientEvent),
       map(
-        (event) => new CreateClientCommand(event.createClientDto, event.data),
+        (event) => new CreateClientCommand(event.createClientDto, event.flag),
       ),
     );
   };
-  
+
   @Saga()
-  ClientLoanCreated = (
-    events$: Observable<any>
-  ): Observable<any> => {
+  ClientLoanCreated = (events$: Observable<any>): Observable<any> => {
     const logger = new Logger(ClientSagas.name);
     return events$.pipe(
       ofType(ClientLoanCreatedEvent),
@@ -43,19 +41,17 @@ export class ClientSagas {
           ),
         ).pipe(
           map((data) => {
-            return new BadRequestException("Error")
+            return new BadRequestException('Error');
             //console.log(data);
-            ;
           }),
-          catchError(err => of(err)),
-          
+          catchError((err) => of(err)),
+
           ofType(BadRequestException),
-          tap(() => console.log("si"),
-          )
+          tap(() => console.log('si')),
         );
       }),
-      
-      catchError(err => throwError(() => new Error('Error!!!!!!!!!!!!!!'))),
+
+      catchError((err) => throwError(() => new Error('Error!!!!!!!!!!!!!!'))),
       map((data) => {
         //console.log(data);
         //return data;

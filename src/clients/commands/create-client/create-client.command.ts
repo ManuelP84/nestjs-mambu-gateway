@@ -1,20 +1,10 @@
-import {
-  CreateDepositAccountDto,
-  DepositTransactionDto,
-  TransferTransactionDto,
-  WithdrawalTransactionDto,
-} from 'src/deposits/dto';
+import { ClientDataTest } from '../../interfaces';
 import { CreateClientDto } from '../../dto';
 
 export class CreateClientCommand {
   constructor(
     public readonly createClientDto: CreateClientDto,
-    public readonly data?: {
-      accountInfo: CreateDepositAccountDto;
-      depositInfo: DepositTransactionDto;
-      withdrawalInfo: WithdrawalTransactionDto;
-      transferInfo: TransferTransactionDto;
-      transferAccount: string;
-    },
+    public readonly flag?: string,
+    public readonly data?: ClientDataTest,
   ) {}
 }

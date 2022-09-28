@@ -35,9 +35,7 @@ export class DepositsController {
   // }
 
   @Post('cycle')
-  async accountTransaction(
-    @Body() accountTransactionDto: AccountTransactionsDto,
-    ) {
-    await this.depositsService.accountTransaction(accountTransactionDto);
+  async clientTransactions() {
+    await this.depositsService.clientTransactions();
   }
 }

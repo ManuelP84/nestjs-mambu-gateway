@@ -1,17 +1,12 @@
+import { ClientDataTest } from '../../../clients/interfaces';
 import {
   DepositTransactionDto,
-  TransferTransactionDto,
-  WithdrawalTransactionDto,
 } from '../../dto';
 
 export class CreateDepositEvent {
   constructor(
     public readonly createDepositInfoDto: DepositTransactionDto,
-    public readonly destinyAccount: string,
-    public readonly data?: {
-      withdrawalInfo: WithdrawalTransactionDto;
-      transferInfo: TransferTransactionDto;
-      transferAccount: string;
-    },
+    public readonly flag?: string,
+    public readonly data?: ClientDataTest,
   ) {}
 }

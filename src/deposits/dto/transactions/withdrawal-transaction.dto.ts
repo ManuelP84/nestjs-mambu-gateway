@@ -25,16 +25,16 @@ export class WithdrawalTransactionDto {
 
   @IsString()
   @IsOptional()
-  paymentOrderId: string;
+  paymentOrderId?: string;
 
   @IsString()
   @IsUUID()
   externalId: string;
 
   @IsString()
-  bookingDate: string;
+  bookingDate?: string;
 
   @IsString()
   @IsOptional()
-  valueDate: string;
+  valueDate?: string;
 }

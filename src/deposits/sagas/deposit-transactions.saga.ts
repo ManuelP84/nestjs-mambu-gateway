@@ -28,6 +28,7 @@ export class DepositTransactionSagas {
         (event) =>
           new CreateDepositAccountCommand(
             event.createDepositAccountDto,
+            event.flag,
             event.data,
           ),
       ),
@@ -45,7 +46,7 @@ export class DepositTransactionSagas {
         (event) =>
           new MakeDepositCommand(
             event.createDepositInfoDto,
-            event.destinyAccount,
+            event.flag,
             event.data,
           ),
       ),
@@ -57,13 +58,14 @@ export class DepositTransactionSagas {
     events$: Observable<CreateWithdrawalEvent>,
   ): Observable<ICommand> => {
     return events$.pipe(
-      delay(1000),
+      delay(5000),
       ofType(CreateWithdrawalEvent),
       map(
         (event) =>
           new MakeWithdrawalCommand(
             event.createWithdrawalDto,
-            event.destinyAccount,
+            event.flag,
+            event.data,
           ),
       ),
     );
@@ -80,7 +82,8 @@ export class DepositTransactionSagas {
         (event) =>
           new MakeTransferCommand(
             event.createTransferDto,
-            event.destinyAccount,
+            event.flag,
+            event.data,
           ),
       ),
     );

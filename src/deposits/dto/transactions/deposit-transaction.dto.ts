@@ -25,7 +25,7 @@ export class DepositTransactionDto {
 
   @IsString()
   @IsOptional()
-  paymentOrderId: string;
+  paymentOrderId?: string;
 
   @IsString()
   @IsUUID()
@@ -33,9 +33,9 @@ export class DepositTransactionDto {
 
   @IsString()
   @IsOptional()
-  bookingDate: string;
+  bookingDate?: string;
 
   @IsString()
   @IsOptional()
-  valueDate: string;
+  valueDate?: string;
 }

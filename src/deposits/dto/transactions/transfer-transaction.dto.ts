@@ -39,5 +39,5 @@ export class TransferTransactionDto {
 
   @IsString()
   @IsOptional()
-  valueDate: string;
+  valueDate?: string;
 }

@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus, EventBus } from '@nestjs/cqrs';
-import { CreateClientCommand } from 'src/clients/commands';
+import { EventBus } from '@nestjs/cqrs';
 import {
   AccountTransactionsDto,
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
 } from './dto';
-import { CreateDepositAccountDto } from './dto/accounts/create-deposit.dto';
 import { CreateClientEvent } from '../clients/events/create-client/create-client.event';
+import { getTestClient } from '../clients/helpers';
 
 @Injectable()
 export class DepositsService {
@@ -29,8 +28,8 @@ export class DepositsService {
   //   return 'This action adds a new deposit';
   // }
 
-  async accountTransaction(accountTransactionDto: AccountTransactionsDto){
-    const { clientInfo, ...restInfo } = accountTransactionDto;
-    await this.eventBus.publish(new CreateClientEvent(clientInfo, restInfo));
+  async clientTransactions(){
+    const newClient = getTestClient();
+    await this.eventBus.publish(new CreateClientEvent(newClient, 'TEST'));
   }
 }
