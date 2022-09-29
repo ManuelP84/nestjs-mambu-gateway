@@ -24,7 +24,6 @@ export class AxiosAdapter implements HttpAdapter {
     try {
       const response = await this.http.post<T>(url, data, config);
       const { data: createdClient } = response;
-
       return createdClient;
     } catch (error) {
       console.log(error.response.data.errors);
