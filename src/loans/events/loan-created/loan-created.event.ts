@@ -1,4 +1,6 @@
-export class LoanCreatedEvent {
+import { IEvent } from "@nestjs/cqrs";
+
+export class LoanCreatedEvent implements IEvent{
     constructor(
         public readonly clientKey: string,
         public readonly productKey: string,

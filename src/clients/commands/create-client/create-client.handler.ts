@@ -36,7 +36,7 @@ export class CreateClientHandler implements ICommandHandler {
         },
       );
 
-      this.eventBus.publish([new ClientCreatedEvent(clientResponse)]);
+      this.eventBus.publish<IEvent>([new ClientCreatedEvent(clientResponse)]);
 
       if (flag === Flags.TEST) {
         const data = {

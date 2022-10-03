@@ -1,7 +1,9 @@
+import { IEvent } from '@nestjs/cqrs';
+
 import { ClientDataTest } from '../../../clients/interfaces';
 import { WithdrawalTransactionDto } from '../../dto';
 
-export class CreateWithdrawalEvent {
+export class CreateWithdrawalEvent implements IEvent{
   constructor(
     public readonly createWithdrawalDto: WithdrawalTransactionDto,
     public readonly flag?: string,
