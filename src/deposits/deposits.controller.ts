@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, Body, Param, HttpCode } from '@nestjs/common';
 import { DepositsService } from './deposits.service';
 import {
   CreateDepositAccountDto,
@@ -36,6 +36,6 @@ export class DepositsController {
 
   @Post('cycle')
   async clientTransactions() {
-    await this.depositsService.clientTransactions();
+    return await this.depositsService.clientTransactions();
   }
 }

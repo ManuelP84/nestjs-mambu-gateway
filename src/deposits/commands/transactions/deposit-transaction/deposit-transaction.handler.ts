@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
@@ -13,6 +13,7 @@ import {
   CreateTransferEvent,
 } from '../../../events';
 import { Flags } from '../../../../common/enums';
+import { HttpExceptionEvent, HttpStatusEvent } from 'src/common/events';
 
 @CommandHandler(MakeDepositCommand)
 export class DepositTransactionHandler implements ICommandHandler {
@@ -27,27 +28,33 @@ export class DepositTransactionHandler implements ICommandHandler {
     const { depositTransactionDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
-    const depositResponse = await this.axios.post<ResponseDepositDto>(
-      `${this.configService.get('urlDeposits')}${
-        data.linkedAccountId
-      }/deposit-transactions`,
-      depositTransactionDto,
-      {
-        headers,
-        baseURL: this.configService.get('baseUrl'),
-      },
-    );
+    try {
+      const depositResponse = await this.axios.post<ResponseDepositDto>(
+        `${this.configService.get('urlDeposits')}${
+          data.linkedAccountId
+        }/deposit-transactions`,
+        depositTransactionDto,
+        {
+          headers,
+          baseURL: this.configService.get('baseUrl'),
+        },
+      );
 
-    this.eventBus.publish(new DepositCreatedEvent(depositResponse));
-    logger.log(
-      `Deposit successful :: ${depositResponse.amount}$ to the account`,
-    );
+      this.eventBus.publish(new DepositCreatedEvent(depositResponse));
+      logger.log(
+        `Deposit successful :: ${depositResponse.amount}$ to the account`,
+      );
 
-    if (flag === Flags.TEST) {
-      this.eventBus.publishAll([
-        new CreateWithdrawalEvent(getWithdrawalTest(), 'TEST', data),
-        new CreateTransferEvent(getTransferTest(), 'TEST', data),
-      ]);
+      if (flag === Flags.TEST) {
+        this.eventBus.publishAll([
+          new CreateWithdrawalEvent(getWithdrawalTest(), Flags.TEST, data),
+          new CreateTransferEvent(getTransferTest(), Flags.TEST, data),
+        ]);
+      } else {
+        this.eventBus.publish(new HttpStatusEvent(HttpStatus.CREATED));
+      }
+    } catch (error) {
+      this.eventBus.publish(new HttpExceptionEvent(new BadRequestException()));
     }
   }
 }

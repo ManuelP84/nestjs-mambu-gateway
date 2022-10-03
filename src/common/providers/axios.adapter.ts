@@ -12,7 +12,7 @@ export class AxiosAdapter implements HttpAdapter {
       const { data } = response;
       return data;
     } catch (error) {
-      throw new Error('This is an error. Please check mambu error documentation.');
+      throw new Error('This is an error. Please check server logs.');
     }
   }
 
@@ -26,8 +26,8 @@ export class AxiosAdapter implements HttpAdapter {
       const { data: createdClient } = response;
       return createdClient;
     } catch (error) {
-      console.log(error.response.data.errors);
-      throw new Error('This is an error. Please check mambu error documentation.');
+      console.log(error);
+      throw new Error('This is an error. Please check server logs.');
     }
   }
 }

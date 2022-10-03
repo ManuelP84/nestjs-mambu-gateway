@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
@@ -7,6 +7,7 @@ import { AxiosAdapter } from '../../../../common/providers/axios.adapter';
 import { MakeWithdrawalCommand } from './withdrawal-transaction.command';
 import { ResponseWithdrawalDto } from '../../../dto';
 import { WithdrawalCreatedEvent } from '../../../events';
+import { HttpExceptionEvent, HttpStatusEvent } from '../../../../common/events';
 
 @CommandHandler(MakeWithdrawalCommand)
 export class WithdrawalTransactionHandler implements ICommandHandler {
@@ -18,21 +19,30 @@ export class WithdrawalTransactionHandler implements ICommandHandler {
   async execute(command: MakeWithdrawalCommand): Promise<void> {
     const logger = new Logger(WithdrawalTransactionHandler.name);
     logger.log('Making a withdrawal...');
-    const { withdrawalTransactionDto, data, flag} = command;
+    const { withdrawalTransactionDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
-    const withdrawalResponse = await this.axios.post<ResponseWithdrawalDto>(
-      `${this.configService.get(
-        'urlDeposits',
-      )}${data.linkedAccountId}/withdrawal-transactions`,
-      withdrawalTransactionDto,
-      {
-        headers,
-        baseURL: this.configService.get('baseUrl'),
-      },
-    );    
-    
-    this.eventBus.publish(new WithdrawalCreatedEvent(withdrawalResponse));  
-    logger.log(`Withdrawal successful :: ${withdrawalResponse.amount}$ from the account`);  
+    try {
+      const withdrawalResponse = await this.axios.post<ResponseWithdrawalDto>(
+        `${this.configService.get('urlDeposits')}${
+          data.linkedAccountId
+        }/withdrawal-transactions`,
+        withdrawalTransactionDto,
+        {
+          headers,
+          baseURL: this.configService.get('baseUrl'),
+        },
+      );
+
+      this.eventBus.publishAll([
+        new WithdrawalCreatedEvent(withdrawalResponse),
+        new HttpStatusEvent(HttpStatus.CREATED),
+      ]);
+      logger.log(
+        `Withdrawal successful :: ${withdrawalResponse.amount}$ from the account`,
+      );
+    } catch (error) {
+      this.eventBus.publish(new HttpExceptionEvent(new BadRequestException()));
+    }
   }
 }

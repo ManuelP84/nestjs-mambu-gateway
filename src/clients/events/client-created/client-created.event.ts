@@ -1,6 +1,7 @@
 import { ClientDataTest } from '../../interfaces';
 import { ResponseClientDto } from '../../dto/response-client.dto';
-export class ClientCreatedEvent {
+import { IEvent } from '@nestjs/cqrs';
+export class ClientCreatedEvent implements IEvent{
   constructor(
     public readonly clientResponse: ResponseClientDto,
     public readonly flag?: string,

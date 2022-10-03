@@ -1,6 +1,6 @@
 import { from, Observable, of, throwError } from 'rxjs';
 import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, UseInterceptors } from '@nestjs/common';
 import { CommandBus, ICommand, ofType, Saga } from '@nestjs/cqrs';
 
 import { ClientLoanCreatedEvent, CreateClientEvent } from '../events';
@@ -8,6 +8,7 @@ import { ChangeStateCommand } from '../../loans/commands/change-state/change-sta
 import { ChangeStateDto } from '../../loans/dtos/change-state/change-state.dto';
 import { Client } from '../entities/client/client.entity';
 import { CreateClientCommand } from '../commands';
+import { ResponseClientDto } from '../dto';
 
 @Injectable()
 export class ClientSagas {
@@ -15,15 +16,28 @@ export class ClientSagas {
   @Saga()
   createClient = (
     events$: Observable<CreateClientEvent>,
-  ): Observable<ICommand> => {
+  ): Observable<any> => {
+    const logger = new Logger(ClientSagas.name);
     return events$.pipe(
       delay(1000),
       ofType(CreateClientEvent),
-      map(
-        (event) => new CreateClientCommand(event.createClientDto, event.flag),
-      ),
+      switchMap((event$) => {
+        logger.log('Saga called CreateClientCommand');
+        return from(
+          this.commandBus.execute<CreateClientCommand, ResponseClientDto>(
+            new CreateClientCommand(event$.createClientDto, event$.flag)
+          ),
+        ).pipe(
+          map((data) => {
+            //console.log(data);
+          }),
+        );
+      }),
+      catchError(err => throwError(() => new BadRequestException())),
     );
   };
+
+  
 
   @Saga()
   ClientLoanCreated = (events$: Observable<any>): Observable<any> => {

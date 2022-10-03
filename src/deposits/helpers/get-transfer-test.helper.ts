@@ -3,7 +3,7 @@ import { TransferTransactionDto } from '../dto/transactions/transfer-transaction
 
 export const getTransferTest = (): TransferTransactionDto => {
   return {
-    amount: 200000,
+    amount: 2000,
     transferDetails: {
       linkedAccountType: 'DEPOSIT',
       linkedAccountId: '',

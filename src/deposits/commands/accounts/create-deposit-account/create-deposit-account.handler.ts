@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { AxiosAdapter } from '../../../../common/providers/axios.adapter';
@@ -12,6 +12,7 @@ import {
   DepositAccountCreatedEvent,
 } from '../../../events';
 import { Flags } from '../../../../common/enums';
+import { HttpExceptionEvent, HttpStatusEvent } from 'src/common/events';
 
 @CommandHandler(CreateDepositAccountCommand)
 export class CreateDepositAccountHandler implements ICommandHandler {
@@ -26,31 +27,37 @@ export class CreateDepositAccountHandler implements ICommandHandler {
     const { createDepositAccountDto, data, flag } = command;
     const headers = getHeaders(this.configService);
 
-    if (flag === Flags.TEST) {
-      createDepositAccountDto.accountHolderKey = data.clientEncodekey;
-    }
+    try {
+      if (flag === Flags.TEST) {
+        createDepositAccountDto.accountHolderKey = data.clientEncodekey;
+      }
 
-    const depositAccountResponse =
-      await this.axios.post<DepositAccountResponseDto>(
-        this.configService.get('urlDeposits'),
-        createDepositAccountDto,
-        {
-          headers,
-          baseURL: this.configService.get('baseUrl'),
-        },
-      );
+      const depositAccountResponse =
+        await this.axios.post<DepositAccountResponseDto>(
+          this.configService.get('urlDeposits'),
+          createDepositAccountDto,
+          {
+            headers,
+            baseURL: this.configService.get('baseUrl'),
+          },
+        );
 
-    this.eventBus.publish(
-      new DepositAccountCreatedEvent(depositAccountResponse),
-    );
-    logger.log(`Deposit account :: ${depositAccountResponse.id} created`);
-
-    if (flag === Flags.TEST) {
-      data.linkedAccountId = depositAccountResponse.id;
-      data.linkedAccountKey = depositAccountResponse.encodedKey;
       this.eventBus.publish(
-        new CreateDepositEvent(getDepositTest(), 'TEST', data),
+        new DepositAccountCreatedEvent(depositAccountResponse),
       );
+      logger.log(`Deposit account :: ${depositAccountResponse.id} created`);
+
+      if (flag === Flags.TEST) {
+        data.linkedAccountId = depositAccountResponse.id;
+        data.linkedAccountKey = depositAccountResponse.encodedKey;
+        this.eventBus.publish(
+          new CreateDepositEvent(getDepositTest(), Flags.TEST, data),
+        );
+      } else {
+        this.eventBus.publish(new HttpStatusEvent(HttpStatus.CREATED));
+      }
+    } catch (error) {
+      this.eventBus.publish(new HttpExceptionEvent(new BadRequestException()));
     }
   }
 }
