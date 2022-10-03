@@ -13,6 +13,7 @@ import {
 } from '../../../events';
 import { Flags } from '../../../../common/enums';
 import { HttpExceptionEvent, HttpStatusEvent } from 'src/common/events';
+import { getTransferFromAccountTest } from '../../../helpers/get-transfer-from-account-test.helper';
 
 @CommandHandler(CreateDepositAccountCommand)
 export class CreateDepositAccountHandler implements ICommandHandler {
@@ -48,10 +49,14 @@ export class CreateDepositAccountHandler implements ICommandHandler {
       logger.log(`Deposit account :: ${depositAccountResponse.id} created`);
 
       if (flag === Flags.TEST) {
-        data.linkedAccountId = depositAccountResponse.id;
         data.linkedAccountKey = depositAccountResponse.encodedKey;
         this.eventBus.publish(
-          new CreateDepositEvent(getDepositTest(), Flags.TEST, data),
+          new CreateDepositEvent(
+            getDepositTest(),
+            depositAccountResponse.id,
+            Flags.TEST,
+            data,
+          ),
         );
       } else {
         this.eventBus.publish(new HttpStatusEvent(HttpStatus.CREATED));

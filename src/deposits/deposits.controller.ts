@@ -1,41 +1,57 @@
-import { Controller, Post, Body, Param, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, Param } from '@nestjs/common';
+
 import { DepositsService } from './deposits.service';
 import {
   CreateDepositAccountDto,
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
-  AccountTransactionsDto
 } from './dto';
 
 @Controller('deposits')
 export class DepositsController {
   constructor(private readonly depositsService: DepositsService) {}
 
-  // @Post()
-  // depositAccount(@Body() createDepositDto: CreateDepositAccountDto) {
-  //   return this.depositsService.depositAccount(createDepositDto);
-  // }
+  @Post('account')
+  depositAccount(@Body() createDepositDto: CreateDepositAccountDto) {
+    return this.depositsService.depositAccount(createDepositDto);
+  }
 
-  // @Post('deposit-transactions')
-  // depositTransaction(@Body() depositTransactionDto: DepositTransactionDto) {
-  //   return this.depositsService.depositTransaction(depositTransactionDto);
-  // }
+  @Post('deposit-transactions/:fromAccount')
+  depositTransaction(
+    @Body() depositTransactionDto: DepositTransactionDto,
+    @Param('fromAccount') fromAccount: string,
+  ) {
+    return this.depositsService.depositTransaction(
+      depositTransactionDto,
+      fromAccount,
+    );
+  }
 
-  // @Post('withdrawal-transactions')
-  // depositWithdrawal(
-  //   @Body() withdrawalTransactionDto: WithdrawalTransactionDto,
-  // ) {
-  //   return this.depositsService.depositWithdrawal(withdrawalTransactionDto);
-  // }
+  @Post('withdrawal-transactions/:fromAccount')
+  depositWithdrawal(
+    @Body() withdrawalTransactionDto: WithdrawalTransactionDto,
+    @Param('fromAccount') fromAccount: string,
+  ) {
+    return this.depositsService.depositWithdrawal(
+      withdrawalTransactionDto,
+      fromAccount,
+    );
+  }
 
-  // @Post('transfer-transactions')
-  // transferTransaction(@Body() transferTransactionDto: TransferTransactionDto) {
-  //   return this.depositsService.transferTransaction(transferTransactionDto);
-  // }
+  @Post('transfer-transactions/:fromAccount')
+  transferTransaction(
+    @Body() transferTransactionDto: TransferTransactionDto,
+    @Param('fromAccount') fromAccount: string,
+  ) {
+    return this.depositsService.transferTransaction(
+      transferTransactionDto,
+      fromAccount,
+    );
+  }
 
   @Post('cycle')
-  async clientTransactions() {
-    return await this.depositsService.clientTransactions();
+  clientTransactionsCycle() {
+    return this.depositsService.clientTransactionsCycle();
   }
 }

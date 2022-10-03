@@ -6,6 +6,7 @@ import { DepositTransactionDto } from '../../../dto';
 export class MakeDepositCommand implements ICommand{
   constructor(
     public readonly depositTransactionDto: DepositTransactionDto,
+    public readonly fromAccount: string,
     public readonly flag?: string,
     public readonly data?: ClientDataTest,
   ) {}

@@ -26,7 +26,11 @@ export class AxiosAdapter implements HttpAdapter {
       const { data: createdClient } = response;
       return createdClient;
     } catch (error) {
-      console.log(error);
+      if (!!error.response.data.errors) {
+        console.log(error.response.data.errors);
+      } else {
+        console.log(error);
+      }
       throw new Error('This is an error. Please check server logs.');
     }
   }

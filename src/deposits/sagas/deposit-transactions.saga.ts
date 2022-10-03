@@ -46,6 +46,7 @@ export class DepositTransactionSagas {
         (event) =>
           new MakeDepositCommand(
             event.createDepositInfoDto,
+            event.fromAccount,
             event.flag,
             event.data,
           ),
@@ -64,6 +65,7 @@ export class DepositTransactionSagas {
         (event) =>
           new MakeWithdrawalCommand(
             event.createWithdrawalDto,
+            event.fromAccount,
             event.flag,
             event.data,
           ),
@@ -82,6 +84,7 @@ export class DepositTransactionSagas {
         (event) =>
           new MakeTransferCommand(
             event.createTransferDto,
+            event.fromAccount,
             event.flag,
             event.data,
           ),

@@ -21,7 +21,7 @@ export class TransferTransactionHandler implements ICommandHandler {
   async execute(command: MakeTransferCommand): Promise<void> {
     const logger = new Logger(TransferTransactionHandler.name);
     logger.log('Making a transfer...');
-    const { transferTransactionDto, data, flag } = command;
+    const { transferTransactionDto, fromAccount, data, flag } = command;
     const headers = getHeaders(this.configService);
 
     try {
@@ -35,7 +35,7 @@ export class TransferTransactionHandler implements ICommandHandler {
       const transferResponse = await this.axios.post<ResponseTransferDto>(
         `${this.configService.get(
           'urlDeposits',
-        )}${getTransferFromAccountTest()}/transfer-transactions`,
+        )}${fromAccount}/transfer-transactions`,
         transferTransactionDto,
         {
           headers,
@@ -45,7 +45,7 @@ export class TransferTransactionHandler implements ICommandHandler {
 
       this.eventBus.publishAll([
         new TransferCreatedEvent(transferResponse),
-        //new HttpStatusEvent(HttpStatus.CREATED),
+        new HttpStatusEvent(HttpStatus.CREATED),
       ]);
       logger.log(
         `Successful transfer of ${transferResponse.amount}$ from the account`,

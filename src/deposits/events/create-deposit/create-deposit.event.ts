@@ -8,6 +8,7 @@ import {
 export class CreateDepositEvent implements IEvent{
   constructor(
     public readonly createDepositInfoDto: DepositTransactionDto,
+    public readonly fromAccount: string,
     public readonly flag?: string,
     public readonly data?: ClientDataTest,
   ) {}

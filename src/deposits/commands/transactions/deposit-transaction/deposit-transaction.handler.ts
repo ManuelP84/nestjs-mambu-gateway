@@ -14,6 +14,7 @@ import {
 } from '../../../events';
 import { Flags } from '../../../../common/enums';
 import { HttpExceptionEvent, HttpStatusEvent } from 'src/common/events';
+import { getTransferFromAccountTest } from '../../../helpers/get-transfer-from-account-test.helper';
 
 @CommandHandler(MakeDepositCommand)
 export class DepositTransactionHandler implements ICommandHandler {
@@ -25,13 +26,13 @@ export class DepositTransactionHandler implements ICommandHandler {
   async execute(command: MakeDepositCommand): Promise<void> {
     const logger = new Logger(DepositTransactionHandler.name);
     logger.log('Making a deposit...');
-    const { depositTransactionDto, data, flag } = command;
+    const { depositTransactionDto, fromAccount, data, flag } = command;
     const headers = getHeaders(this.configService);
 
     try {
       const depositResponse = await this.axios.post<ResponseDepositDto>(
         `${this.configService.get('urlDeposits')}${
-          data.linkedAccountId
+          fromAccount
         }/deposit-transactions`,
         depositTransactionDto,
         {
@@ -47,8 +48,8 @@ export class DepositTransactionHandler implements ICommandHandler {
 
       if (flag === Flags.TEST) {
         this.eventBus.publishAll([
-          new CreateWithdrawalEvent(getWithdrawalTest(), Flags.TEST, data),
-          new CreateTransferEvent(getTransferTest(), Flags.TEST, data),
+          new CreateWithdrawalEvent(getWithdrawalTest(), fromAccount, Flags.TEST, data),
+          new CreateTransferEvent(getTransferTest(), getTransferFromAccountTest(), Flags.TEST, data),
         ]);
       } else {
         this.eventBus.publish(new HttpStatusEvent(HttpStatus.CREATED));

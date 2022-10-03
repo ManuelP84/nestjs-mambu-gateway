@@ -19,13 +19,13 @@ export class WithdrawalTransactionHandler implements ICommandHandler {
   async execute(command: MakeWithdrawalCommand): Promise<void> {
     const logger = new Logger(WithdrawalTransactionHandler.name);
     logger.log('Making a withdrawal...');
-    const { withdrawalTransactionDto, data, flag } = command;
+    const { withdrawalTransactionDto, fromAccount, data, flag } = command;
     const headers = getHeaders(this.configService);
 
     try {
       const withdrawalResponse = await this.axios.post<ResponseWithdrawalDto>(
         `${this.configService.get('urlDeposits')}${
-          data.linkedAccountId
+          fromAccount
         }/withdrawal-transactions`,
         withdrawalTransactionDto,
         {

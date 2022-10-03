@@ -1,41 +1,75 @@
+import { firstValueFrom, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { EventBus, ofType } from '@nestjs/cqrs';
+
 import {
-  AccountTransactionsDto,
+  CreateDepositAccountDto,
   DepositTransactionDto,
   TransferTransactionDto,
   WithdrawalTransactionDto,
 } from './dto';
-import { CreateClientEvent } from '../clients/events/create-client/create-client.event';
+import { CreateClientEvent } from '../clients/events';
 import { getTestClient } from '../clients/helpers';
 import { Flags } from '../common/enums/flags.enum';
-import { ClientCreatedEvent } from '../clients/events/client-created/client-created.event';
-import { firstValueFrom, merge, of, tap, throwError } from 'rxjs';
-import { LoanCreatedEvent } from '../loans/events/loan-created/loan-created.event';
 import { HttpExceptionEvent } from '../common/events';
-import { map, catchError, mergeMap } from 'rxjs/operators';
-import { HttpStatusEvent } from '../common/events/http-status.event';
+import { HttpStatusEvent } from '../common/events';
+import { CreateDepositAccountEvent, CreateDepositEvent } from './events';
+import { CreateTransferEvent, CreateWithdrawalEvent } from './events';
 
 @Injectable()
 export class DepositsService {
   constructor(private readonly eventBus: EventBus) {}
-  // depositAccount(createDepositDto: CreateDepositAccountDto) {
-  //   return 'This action adds a new deposit';
-  // }
+  async depositAccount(createDepositAccountDto: CreateDepositAccountDto) {
+    await this.eventBus.publish(
+      new CreateDepositAccountEvent(createDepositAccountDto, Flags.PRODUCTION),
+    );
+    await this.handleExceptions();
+  }
 
-  // depositTransaction(depositTransactionDto: DepositTransactionDto) {
-  //   return 'This action adds a new deposit';
-  // }
+  async depositTransaction(
+    depositTransactionDto: DepositTransactionDto,
+    fromAccount: string,
+  ) {
+    await this.eventBus.publish(
+      new CreateDepositEvent(
+        depositTransactionDto,
+        fromAccount,
+        Flags.PRODUCTION,
+      ),
+    );
+    await this.handleExceptions();
+  }
 
-  // depositWithdrawal(withdrawalTransactionDto: WithdrawalTransactionDto) {
-  //   return 'This action adds a new deposit';
-  // }
+  async depositWithdrawal(
+    withdrawalTransactionDto: WithdrawalTransactionDto,
+    fromAccount: string,
+  ) {
+    await this.eventBus.publish(
+      new CreateWithdrawalEvent(
+        withdrawalTransactionDto,
+        fromAccount,
+        Flags.PRODUCTION,
+      ),
+    );
+    await this.handleExceptions();
+  }
 
-  // transferTransaction(transferTransactionDto: TransferTransactionDto) {
-  //   return 'This action adds a new deposit';
-  // }
+  async transferTransaction(
+    transferTransactionDto: TransferTransactionDto,
+    fromAccount: string,
+  ) {
+    await this.eventBus.publish(
+      new CreateTransferEvent(
+        transferTransactionDto,
+        fromAccount,
+        Flags.PRODUCTION,
+      ),
+    );
+    await this.handleExceptions();
+  }
 
-  async clientTransactions() {
+  async clientTransactionsCycle() {
     const newClient = getTestClient();
     await this.eventBus.publish(new CreateClientEvent(newClient, Flags.TEST));
     await this.handleExceptions();
